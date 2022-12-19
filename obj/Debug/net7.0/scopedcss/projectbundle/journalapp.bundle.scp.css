@@ -1,0 +1,169 @@
+/* _content/journalapp/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand[b-3tspz0la4m] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+  margin: auto 5px 0 auto;
+
+}
+@media (max-width: 480px) {
+  .navbar-brand[b-3tspz0la4m] {
+    float: none;
+    display: block;
+    overflow: hidden;
+  }
+  }
+
+.navbar[b-3tspz0la4m]{
+  font-weight: normal;
+  font-family: 'Arial', monospace;
+  font-size: 14px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.text-logo[b-3tspz0la4m]{
+  text-decoration: none;
+  padding-right: 10px;
+  text-align: center;
+  padding-left: -2px;
+  font-family: 'Century Gothic', monospace;
+  font-weight: 600;
+  padding-bottom: 0;
+}
+.text-menu[b-3tspz0la4m]{
+  font-family: Arial;
+  font-weight: normal;
+}
+
+a[b-3tspz0la4m] {
+  color: #0077cc;
+}
+
+.btn-primary[b-3tspz0la4m] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-3tspz0la4m], .nav-pills .show > .nav-link[b-3tspz0la4m] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+
+.footer[b-3tspz0la4m] {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+img.img-fluid[b-3tspz0la4m]{
+  height: 40;
+  padding-right: 0;
+}
+
+/* ---------------------------------------------------
+  SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper[b-3tspz0la4m] {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+#sidebar[b-3tspz0la4m] {
+  min-width: 250px;
+  max-width: 250px;
+  background: #FEFEFE;
+  transition: all 0.3s;
+}
+
+#sidebar.active[b-3tspz0la4m] {
+  margin-left: -250px;
+}
+
+
+#sidebar ul.components[b-3tspz0la4m] {
+  padding: 20px 0;
+  border-bottom: 1px solid #e7e8f2;
+}
+
+#sidebar ul p[b-3tspz0la4m] {
+  padding: 10px;
+}
+
+#sidebar ul li a[b-3tspz0la4m] {
+  padding: 10px;
+  display: block;
+}
+
+#sidebar ul li a:hover[b-3tspz0la4m] {
+  color: #7386D5;
+  background: #e7e8f2;
+}
+
+#sidebar ul li.active>a[b-3tspz0la4m],
+a[aria-expanded="true"][b-3tspz0la4m] {
+  background: #323C8D;
+  color: #e7e8f2;
+}
+
+a[data-toggle="collapse"][b-3tspz0la4m] {
+  position: relative;
+}
+
+.dropdown-toggle[b-3tspz0la4m]::after {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+ul ul a[b-3tspz0la4m] {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: #e7e8f2;
+}
+
+
+a.article[b-3tspz0la4m],
+a.article:hover[b-3tspz0la4m] {
+  background: #6d7fcc !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------
+  CONTENT STYLE
+----------------------------------------------------- */
+
+#content[b-3tspz0la4m] {
+  width: 100%;
+  padding: 20px;
+  min-height: 100vh;
+  transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+  MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+  #sidebar[b-3tspz0la4m] {
+      margin-left: -250px;
+  }
+  #sidebar.active[b-3tspz0la4m] {
+      margin-left: 0;
+  }
+  #sidebarCollapse span[b-3tspz0la4m] {
+      display: none;
+  }
+}

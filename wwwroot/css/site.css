@@ -1,0 +1,79 @@
+@font-face {
+  font-family: 'Arial', monospace;
+  src: 
+  url(~/fonts/arialmt.ttf) format('truetype');
+  
+}
+
+@font-face {
+  font-family: 'Century Gothic', monospace;
+  src: url(~/fonts/centurygothic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Tahoma', monospace;
+  src: url(~/fonts/tahoma.ttf) format('truetype');
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #e7e8f2;
+}
+
+.text-logo{
+  text-decoration: none;
+  padding-right: 10px;
+  text-align: center;
+  padding-left: -2px;
+  font-family: 'Century Gothic', monospace;
+  font-weight: 600;
+}
+
+.win-reg{
+  align-self: center;
+}
+.card{
+  margin: 30px auto auto auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 5px #bdbeca;
+}
+.img-fluid{
+  float: right;
+}
+.btn-primary{
+  background-color: #323C8D;
+  border-color: #323C8D;
+  margin-top: 15px;
+  font-family: 'Arial', monospace;
+  border-radius: 12px;
+}
+.form-control{
+  margin-top: 15px;
+    font-family: 'Arial', monospace;
+  border-radius: 12px;
+}
+.input-group{
+  align-items: center;
+  justify-content: center;
+}
+
