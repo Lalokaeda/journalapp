@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace journalapp;
 
-public partial class JournalContext : IdentityDbContext<ClassTeacher>
+public partial class JournalContext : IdentityDbContext<IdentityUser>
 {
     public JournalContext()
     {
@@ -22,6 +16,14 @@ public partial class JournalContext : IdentityDbContext<ClassTeacher>
         : base(options)
     {
     }
+
+    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
     public virtual DbSet<Business> Businesses { get; set; }
 
@@ -70,42 +72,77 @@ public partial class JournalContext : IdentityDbContext<ClassTeacher>
     public virtual DbSet<WorkWithParent> WorkWithParents { get; set; }
 
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
-
-    //       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //  #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //           => optionsBuilder.UseSqlServer("Server=DESKTOP-7464DNT;Database=Journal;TrustServerCertificate=True;Trusted_Connection=True;Integrated Security=SSPI;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    { //modelBuilder.Ignore <IdentityUserLogin<string>>();
-     base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
-            {
-                Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
-                Name = "admin",
-                NormalizedName = "ADMIN"
-            });
+    {
+        modelBuilder.Entity<AspNetRole>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetRoles");
 
-            modelBuilder.Entity<ClassTeacher>().HasData(new ClassTeacher
-            {
-                Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
-                Email = "my@email.com",
-                NormalizedEmail = "MY@EMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = new PasswordHasher<ClassTeacher>().HashPassword(null, "superpassword"),
-                SecurityStamp = string.Empty
-            });
+            entity.HasIndex(e => e.Name, "RoleNameIndex").IsUnique();
 
-             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
-            {
-                RoleId = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
-                UserId = "3b62472e-4f66-49fa-a20f-e7685b9565d8"
-            });
+            entity.Property(e => e.Id).HasMaxLength(128);
+            entity.Property(e => e.Name).HasMaxLength(256);
+        });
+
+        modelBuilder.Entity<AspNetUser>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUsers");
+
+            entity.HasIndex(e => e.UserName, "UserNameIndex").IsUnique();
+
+            entity.Property(e => e.Id).HasMaxLength(128);
+            entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
+            entity.Property(e => e.UserName).HasMaxLength(256);
+
+            entity.HasOne(d => d.ClassTeacher).WithMany(p => p.AspNetUsers)
+                .HasForeignKey(d => d.ClassTeacherId)
+                .HasConstraintName("FK_AspNetUsers_ClassTeachers");
+
+            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AspNetUserRole",
+                    r => r.HasOne<AspNetRole>().WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId"),
+                    l => l.HasOne<AspNetUser>().WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "RoleId").HasName("PK_dbo.AspNetUserRoles");
+                        j.HasIndex(new[] { "RoleId" }, "IX_RoleId");
+                        j.HasIndex(new[] { "UserId" }, "IX_UserId");
+                    });
+        });
+
+        modelBuilder.Entity<AspNetUserClaim>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUserClaims");
+
+            entity.HasIndex(e => e.UserId, "IX_UserId");
+
+            entity.Property(e => e.UserId).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
+        });
+
+        modelBuilder.Entity<AspNetUserLogin>(entity =>
+        {
+            entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId }).HasName("PK_dbo.AspNetUserLogins");
+
+            entity.HasIndex(e => e.UserId, "IX_UserId");
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.ProviderKey).HasMaxLength(128);
+            entity.Property(e => e.UserId).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
+        });
 
         modelBuilder.Entity<Business>(entity =>
         {
@@ -128,11 +165,9 @@ public partial class JournalContext : IdentityDbContext<ClassTeacher>
 
         modelBuilder.Entity<ClassTeacher>(entity =>
         {
-            
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .IsUnicode(false);
-            
             entity.Property(e => e.Patronymic)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -374,6 +409,9 @@ public partial class JournalContext : IdentityDbContext<ClassTeacher>
             entity.Property(e => e.PhoneNum)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Sex)
+                .HasMaxLength(1)
+                .IsUnicode(false);
             entity.Property(e => e.Surname)
                 .HasMaxLength(200)
                 .IsUnicode(false);
@@ -471,7 +509,6 @@ public partial class JournalContext : IdentityDbContext<ClassTeacher>
         });
 
         OnModelCreatingPartial(modelBuilder);
-       
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

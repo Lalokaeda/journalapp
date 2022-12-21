@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-0">
 
             <div class="container-fluid">
              <a class="navbar-brand" href="#">
@@ -25,73 +25,83 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark text-menu" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark text-menu" href="#"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark text-menu" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark text-menu" href="#"></a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark text-menu" href="#"></a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark text-menu" href="#"></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-
 <div class="wrapper">
-     <nav id="sidebar">
-            <ul class="list-unstyled components">
-                <p style="padding: 0;">Dummy Heading</p>
-                <li class="active">
-                    <a class="nav-link text-dark text-menu" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">Home 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 3</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="nav-link text-dark text-menu" href="#">About</a>
-                </li>
-                <li>
-                    <a class="nav-link text-dark text-menu" href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Page 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 3</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="nav-link text-dark text-menu" href="#">Portfolio</a>
-                </li>
-                <li>
-                    <a class="nav-link text-dark text-menu" href="#">Contact</a>
-                </li>
-            </ul>
-        </nav>
+  <div class="menu">
+    <nav class="menu-list">
+        <ul>
+        <li>
+        <a href="#">Социальный паспорт</a>
+        </li>
+        <li>
+        <a href="#">Список обучающихся</a>
+        </li>
+        <li>
+        <a href="#">Лист здоровья</a>
+        </li>
+        <li>
+        <a href="#">Организация самоуправления</a>
+        </li>
+        <li>
+        <a href="#">Группа риска</a>
+        </li>
+        <li>
+        <a href="#">Сведения о занятости во внеурочное время</a>
+        </li>
+        <li>
+        <a href="#">Участие в различных мероприятиях</a>
+        </li>
+        <li>
+        <a href="#">Воспитательная деятельность</a>
+        </li>
+        <li>
+        <a href="#">График посещения общежития</a>
+        </li>
+        <li>
+        <a href="#">Педагогический контроль</a>
+        </li>
+        <li>
+        <a href="#">Индивидуальная работа</a>
+        </li>
+        <li>
+        <a href="#">Часы общения</a>
+        </li>
+        <li>
+        <a href="#">Родительские собрания</a>
+        </li>
+    </ul>
+    </nav>
+  </div>
 
-    <div class="container-fluid" id="content">
+
+    <div class="container-fluid content" id="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - кринге - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - МпК - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    </div>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

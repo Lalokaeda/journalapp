@@ -11,7 +11,7 @@ public partial class EducativeEvent
 
     public int Lobid { get; set; }
 
-    public string ClassTeacherId { get; set; }
+    public int ClassTeacherId { get; set; }
 
     public DateTime Date { get; set; }
 

@@ -1,9 +1,10 @@
-@page
 @model journalapp.Views.login
 @{
     ViewData["Title"] = "Журнал";
 }
-
+@{
+    Layout = "_Layout";
+}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,7 +18,7 @@
 </head>
 <body>
     
-    <div class="card win-reg" style="width: 37rem;">
+    <div class="card" id="win-reg" style="width: 37rem;">
         <div class="row centered" style="padding-top: 10px;">
        <div class="input-group ">
     <img class="img-fluid" src="~/images/logo-no-shadow.svg" style="margin-right: 5px;"  height="40" width="30" alt="">

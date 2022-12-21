@@ -13,6 +13,8 @@ public partial class Student
 
     public string? Patronymic { get; set; }
 
+    public string? Sex { get; set; }
+
     public int? HealthGroupId { get; set; }
 
     public string PhoneNum { get; set; } = null!;

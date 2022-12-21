@@ -48,15 +48,14 @@ body {
   font-weight: 600;
 }
 
-.win-reg{
+#win-reg{
   align-self: center;
-}
-.card{
   margin: 30px auto auto auto;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 5px 5px #bdbeca;
 }
+
 .img-fluid{
   float: right;
 }

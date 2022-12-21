@@ -11,7 +11,7 @@ public partial class Group
 
     public DateTime RecruitmentYear { get; set; }
 
-    public string ClassTeacherId { get; set; }
+    public int ClassTeacherId { get; set; }
 
     public virtual ClassTeacher ClassTeacher { get; set; } = null!;
 
