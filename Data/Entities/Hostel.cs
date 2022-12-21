@@ -10,6 +10,4 @@ public partial class Hostel
     public string Address { get; set; } = null!;
 
     public virtual ICollection<Room> Rooms { get; } = new List<Room>();
-
-    public virtual ICollection<Room> RoomsNavigation { get; } = new List<Room>();
 }

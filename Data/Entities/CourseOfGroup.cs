@@ -7,11 +7,9 @@ public partial class CourseOfGroup
 {
     public string GroupId { get; set; } = null!;
 
-    public int CourseId { get; set; }
+    public int Course { get; set; }
 
     public DateTime Year { get; set; }
-
-    public virtual Course Course { get; set; } = null!;
 
     public virtual Group Group { get; set; } = null!;
 }

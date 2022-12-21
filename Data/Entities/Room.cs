@@ -16,6 +16,4 @@ public partial class Room
     public virtual Hostel Hostel { get; set; } = null!;
 
     public virtual ICollection<Student> Students { get; } = new List<Student>();
-
-    public virtual ICollection<Hostel> Hostels { get; } = new List<Hostel>();
 }

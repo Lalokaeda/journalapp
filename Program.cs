@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using journalapp.Data;
 
 namespace journalapp;
 
@@ -12,19 +13,22 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddTransient<Datamanager>();
+
         var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'JournalContextConnection' not found.");
 
          builder.Services.AddDbContext<JournalContext>(options => options.UseSqlServer(connectionString));
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-        builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
+
 
         // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         // .AddCookie(options => options.LoginPath = "/login");
 
 
-        builder.Services.AddIdentity<AspNetUser, AspNetRole>(opts =>
+        builder.Services.AddIdentity<AspNetUser, IdentityRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = false;
                 opts.Password.RequiredLength = 6;
@@ -64,12 +68,11 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
-app.UseStatusCodePages();
-app.UseMvcWithDefaultRoute();
+        app.UseStatusCodePages();
 
         app.UseRouting();
 
-app.UseCookiePolicy();
+        app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -77,9 +80,6 @@ app.UseCookiePolicy();
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapControllerRoute(
-            name: "login",
-            pattern: "{controller=Account}/{action=Index}/{id?}");
 // app.MapRazorPages();
         app.Run();
     }

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace journalapp;
 
-public partial class JournalContext : IdentityDbContext<IdentityUser>
+public partial class JournalContext : IdentityDbContext<AspNetUser>
 {
     public JournalContext()
     {
@@ -17,19 +16,15 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
     {
     }
 
-    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
-    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-
-    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
     public virtual DbSet<Business> Businesses { get; set; }
 
     public virtual DbSet<ClassTeacher> ClassTeachers { get; set; }
 
-    public virtual DbSet<Course> Courses { get; set; }
+    public virtual DbSet<CommunicationHour> CommunicationHours { get; set; }
 
     public virtual DbSet<CourseOfGroup> CourseOfGroups { get; set; }
 
@@ -53,6 +48,12 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
 
     public virtual DbSet<Parent> Parents { get; set; }
 
+    public virtual DbSet<ParentMeeting> ParentMeetings { get; set; }
+
+    public virtual DbSet<Passport> Passports { get; set; }
+
+    public virtual DbSet<Position> Positions { get; set; }
+
     public virtual DbSet<RiskGroup> RiskGroups { get; set; }
 
     public virtual DbSet<Room> Rooms { get; set; }
@@ -71,19 +72,11 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
 
     public virtual DbSet<WorkWithParent> WorkWithParents { get; set; }
 
+    public virtual DbSet<WorkWithStudent> WorkWithStudents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AspNetRole>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetRoles");
-
-            entity.HasIndex(e => e.Name, "RoleNameIndex").IsUnique();
-
-            entity.Property(e => e.Id).HasMaxLength(128);
-            entity.Property(e => e.Name).HasMaxLength(256);
-        });
-
+base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<AspNetUser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUsers");
@@ -92,58 +85,14 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
 
             entity.Property(e => e.Id).HasMaxLength(128);
             entity.Property(e => e.Email).HasMaxLength(256);
-            entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(256);
 
             entity.HasOne(d => d.ClassTeacher).WithMany(p => p.AspNetUsers)
                 .HasForeignKey(d => d.ClassTeacherId)
                 .HasConstraintName("FK_AspNetUsers_ClassTeachers");
+    });
 
-            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "AspNetUserRole",
-                    r => r.HasOne<AspNetRole>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId"),
-                    l => l.HasOne<AspNetUser>().WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RoleId").HasName("PK_dbo.AspNetUserRoles");
-                        j.HasIndex(new[] { "RoleId" }, "IX_RoleId");
-                        j.HasIndex(new[] { "UserId" }, "IX_UserId");
-                    });
-        });
-
-        modelBuilder.Entity<AspNetUserClaim>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUserClaims");
-
-            entity.HasIndex(e => e.UserId, "IX_UserId");
-
-            entity.Property(e => e.UserId).HasMaxLength(128);
-
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
-        });
-
-        modelBuilder.Entity<AspNetUserLogin>(entity =>
-        {
-            entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId }).HasName("PK_dbo.AspNetUserLogins");
-
-            entity.HasIndex(e => e.UserId, "IX_UserId");
-
-            entity.Property(e => e.LoginProvider).HasMaxLength(128);
-            entity.Property(e => e.ProviderKey).HasMaxLength(128);
-            entity.Property(e => e.UserId).HasMaxLength(128);
-
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
-        });
-
+      
         modelBuilder.Entity<Business>(entity =>
         {
             entity.ToTable("Business");
@@ -176,9 +125,27 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<CommunicationHour>(entity =>
+        {
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.GroupId)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+            entity.Property(e => e.Result)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Theme)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Group).WithMany(p => p.CommunicationHours)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_CommunicationHours_Groups");
+        });
+
         modelBuilder.Entity<CourseOfGroup>(entity =>
         {
-            entity.HasKey(e => new { e.GroupId, e.CourseId });
+            entity.HasKey(e => new { e.GroupId, e.Course });
 
             entity.ToTable("CourseOfGroup");
 
@@ -186,10 +153,6 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
                 .HasMaxLength(15)
                 .IsUnicode(false);
             entity.Property(e => e.Year).HasColumnType("date");
-
-            entity.HasOne(d => d.Course).WithMany(p => p.CourseOfGroups)
-                .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK_CourseOfGroup_Courses");
 
             entity.HasOne(d => d.Group).WithMany(p => p.CourseOfGroups)
                 .HasForeignKey(d => d.GroupId)
@@ -282,7 +245,7 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<HealthGroup>(entity =>
         {
-            entity.ToTable("HealthGroup");
+            entity.HasKey(e => e.Id).HasName("PK_HealthGroup");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name)
@@ -297,23 +260,6 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.Address)
                 .HasMaxLength(250)
                 .IsUnicode(false);
-
-            entity.HasMany(d => d.RoomsNavigation).WithMany(p => p.Hostels)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RoomsOfHostel",
-                    r => r.HasOne<Room>().WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_RoomsOfHostel_Rooms"),
-                    l => l.HasOne<Hostel>().WithMany()
-                        .HasForeignKey("HostelId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_RoomsOfHostel_Hostels"),
-                    j =>
-                    {
-                        j.HasKey("HostelId", "RoomId");
-                        j.ToTable("RoomsOfHostel");
-                    });
         });
 
         modelBuilder.Entity<LineOfBusiness>(entity =>
@@ -358,6 +304,55 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
                         j.HasKey("ParentId", "SrudentId");
                         j.ToTable("ParentOfStud");
                     });
+        });
+
+        modelBuilder.Entity<ParentMeeting>(entity =>
+        {
+            entity.ToTable("ParentMeeting");
+
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.GroupId)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+            entity.Property(e => e.Result)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Theme)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Group).WithMany(p => p.ParentMeetings)
+                .HasForeignKey(d => d.GroupId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ParentMeeting_Groups");
+        });
+
+        modelBuilder.Entity<Passport>(entity =>
+        {
+            entity.ToTable("Passport");
+
+            entity.Property(e => e.CountOvzstud).HasColumnName("CountOVZStud");
+            entity.Property(e => e.CountPdnstud).HasColumnName("CountPDNStud");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.GroupId)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Group).WithMany(p => p.Passports)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_Passport_Groups");
+        });
+
+        modelBuilder.Entity<Position>(entity =>
+        {
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Student).WithMany(p => p.Positions)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Positions_Students");
         });
 
         modelBuilder.Entity<RiskGroup>(entity =>
@@ -506,6 +501,17 @@ public partial class JournalContext : IdentityDbContext<IdentityUser>
             entity.HasOne(d => d.Parent).WithMany(p => p.WorkWithParents)
                 .HasForeignKey(d => d.ParentId)
                 .HasConstraintName("FK_WorkWithParents_Parents");
+        });
+
+        modelBuilder.Entity<WorkWithStudent>(entity =>
+        {
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.Reason).IsUnicode(false);
+            entity.Property(e => e.Work).IsUnicode(false);
+
+            entity.HasOne(d => d.Student).WithMany(p => p.WorkWithStudents)
+                .HasForeignKey(d => d.StudentId)
+                .HasConstraintName("FK_WorkWithStudents_Students");
         });
 
         OnModelCreatingPartial(modelBuilder);

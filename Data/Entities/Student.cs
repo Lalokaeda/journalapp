@@ -13,7 +13,7 @@ public partial class Student
 
     public string? Patronymic { get; set; }
 
-    public string? Sex { get; set; }
+    public string Sex { get; set; } = null!;
 
     public int? HealthGroupId { get; set; }
 
@@ -43,11 +43,15 @@ public partial class Student
 
     public virtual HealthGroup? HealthGroup { get; set; }
 
+    public virtual ICollection<Position> Positions { get; } = new List<Position>();
+
     public virtual Room? Room { get; set; }
 
     public virtual ICollection<StudentsOfEvent> StudentsOfEvents { get; } = new List<StudentsOfEvent>();
 
     public virtual ICollection<StudentsOnPedControl> StudentsOnPedControls { get; } = new List<StudentsOnPedControl>();
+
+    public virtual ICollection<WorkWithStudent> WorkWithStudents { get; } = new List<WorkWithStudent>();
 
     public virtual ICollection<Parent> Parents { get; } = new List<Parent>();
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\journalapp\\journalapp.csproj": {}
+    "d:\\journalapp\\journalapp.csproj": {}
   },
   "projects": {
-    "D:\\journalapp\\journalapp.csproj": {
+    "d:\\journalapp\\journalapp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\journalapp\\journalapp.csproj",
+        "projectUniqueName": "d:\\journalapp\\journalapp.csproj",
         "projectName": "journalapp",
-        "projectPath": "D:\\journalapp\\journalapp.csproj",
+        "projectPath": "d:\\journalapp\\journalapp.csproj",
         "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\journalapp\\obj\\",
+        "outputPath": "d:\\journalapp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
