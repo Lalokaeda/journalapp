@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace journalapp;
 
-public partial class AspNetRole : IdentityRole
+public partial class AspNetRole :IdentityRole
 {
     public string Id { get; set; } = null!;
 

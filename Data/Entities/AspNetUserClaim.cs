@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace journalapp;
 
-public partial class AspNetUserClaim
+public partial class AspNetUserClaim: IdentityUserClaim
 {
     public int Id { get; set; }
 
