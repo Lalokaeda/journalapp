@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3TXNA6T2E0q9lUVu0/nzIFo8KMRgcc48avXPoQf9pbagXhTPvPgFgLfbU1b/qNYxCJsyWXYG/ow9aubhdK729A==",
+  "dgSpecHash": "SSNrVctoopKrEV/rJUXvAr4Ivk8ZmYf0+35RYPC40LLZdnMk7q574lcBctmoT12fbSU9F06W0mEcsGjuT094XA==",
   "success": true,
-  "projectFilePath": "d:\\journalapp\\journalapp.csproj",
+  "projectFilePath": "D:\\journalapp\\journalapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Acer\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

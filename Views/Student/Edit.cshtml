@@ -1,0 +1,69 @@
+@model Student
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card win">
+<h1>Редактировать</h1>
+ <div class="card-body">
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " for="inputGroupSelect02">Группа</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect02">
+    <option selected></option>
+    <option value="1">Исп-19-3</option>
+    <option value="2">Исп-19-4</option>
+  </select>
+</div>
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text form-controlRed">Фамилия</span>
+  </div>
+  <input type="text" class="form-control form-controlRed">
+</div>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text form-controlRed">Имя</span>
+  </div>
+  <input type="text" class="form-control form-controlRed">
+</div>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text form-controlRed">Отчество</span>
+  </div>
+  <input type="text" class="form-control form-controlRed">
+</div>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " for="inputGroupSelect01">Пол</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect01">
+    <option selected></option>
+    <option value="1">М</option>
+    <option value="2">Ж</option>
+  </select>
+</div>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <div class="input-group-text">
+      <input type="checkbox" aria-label="Checkbox for following text input">
+    </div>
+  </div>
+  <label>Коммерция</label>
+</div>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <div class="input-group-text">
+      <input type="checkbox" aria-label="Checkbox for following text input">
+    </div>
+  </div>
+  <label>Отчислен</label>
+</div>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text form-controlRed">Примечание</span>
+  </div>
+  <input type="text" class="form-control form-controlRed">
+</div>
+    <input type="submit" class="btn btn-primary" value="Сохранить">

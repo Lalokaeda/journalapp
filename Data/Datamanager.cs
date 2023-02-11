@@ -2,25 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using journalapp.Data.Repositories;
 
 namespace journalapp.Data
 {
-    public class Datamanager
+    public static class Datamanager
     {
-        public ClassTeacher classTeacher{get; set;}
-        public Student student{get; set;}
-        public HealthGroup healthGroup{get; set;}
-        public Curator curator{get; set;}
-        public CourseOfGroup courseOfGroup{get; set;}
-        public Event eventt{get; set;}
-        public GraphicVisitsHostel graphicVisitsHostel{get; set;}
-        public Group group{get; set;}
-        public Hostel hostel{get; set;}
-        public LineOfBusiness lineOfBusiness{get; set;}
-        public RiskGroup riskGroup{get; set;}
-        public Room room{get; set;}
-        public Speciality speciality{get; set;}
-        public TypeOfCrime typeOfCrime{get; set;}
-        public WorkWithParent workWithParent {get; set;}
+        public static ClassTeacherRepos classTeacher{get; set;}
+        public static StudRepos student{get; set;}
+        public static HealthGroupRepos healthGroup{get; set;}
+        public static CuratorRepos curator{get; set;}
+        public static CourseOfGroupRepos courseOfGroup{get; set;}
+        public static EventRepos eventt{get; set;}
+        // public GraphicVisitsHostelRepos graphicVisitsHostel{get; set;}
+        public static GroupRepos group{get; set;}
+        public static HostelRepos hostel{get; set;}
+        // public LineOfBusinessRepos lineOfBusiness{get; set;}
+        public static RiskGroupRepos riskGroup{get; set;}
+        public static RoomRepos room{get; set;}
+        public static SpecialityRepos speciality{get; set;}
+        public static TypeOfCrimeRepos typeOfCrime{get; set;}
+        public static WorkWithParentRepos workWithParent {get; set;}
+
+        // public Datamanager(ClassTeacherRepos classTeacherRepos,StudRepos studRepos, HealthGroupRepos healthGroupRepos,
+        // CuratorRepos curatorRepos, CourseOfGroupRepos courseOfGroupRepos, EventRepos eventRepos, GroupRepos groupRepos,
+        // HostelRepos hostelRepos, RiskGroupRepos riskGroupRepos, RoomRepos roomRepos, SpecialityRepos specialityRepos,
+        // TypeOfCrimeRepos typeOfCrimeRepos, WorkWithParentRepos workWithParentRepos){
+        
+        // classTeacher=classTeacherRepos;
+        // student=studRepos;
+        // healthGroup=healthGroupRepos;
+        // curator=curatorRepos;
+        // courseOfGroup=courseOfGroupRepos;
+        // eventt=eventRepos;
+        // // public GraphicVisitsHostelRepos graphicVisitsHostel{get; set;}
+        // group=groupRepos;
+        // hostel=hostelRepos;
+        // // public LineOfBusinessRepos lineOfBusiness{get; set;}
+        // riskGroup=riskGroupRepos;
+        // room=roomRepos;
+        // speciality=specialityRepos;
+        // typeOfCrime=typeOfCrimeRepos;
+        // workWithParent =workWithParentRepos;
+        // }
     }
 }

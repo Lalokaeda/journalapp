@@ -14,9 +14,9 @@ namespace journalapp.Data.Repositories
             this.context = context;
         }
 
-        public IQueryable<Student> GetStudents()
+        public List<Student> GetStudents()
         {
-            return context.Students;
+            return context.Students.ToList();
         }
 
         public Student GetStudentsById(int id)

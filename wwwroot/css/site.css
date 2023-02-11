@@ -47,6 +47,10 @@ body {
   font-family: 'Century Gothic', monospace;
   font-weight: 600;
 }
+#headAuthWin{
+  align-items: center;
+  justify-content: center;
+}
 
 #win-reg{
   align-self: center;
@@ -71,8 +75,19 @@ body {
     font-family: 'Arial', monospace;
   border-radius: 12px;
 }
-.input-group{
-  align-items: center;
-  justify-content: center;
+
+.form-controlRed{
+  margin-top: 15px;
+    font-family: 'Arial', monospace;
 }
 
+
+.table{
+  background: #FEFEFE;
+}
+
+.win{
+  margin: 10px;
+  padding: 10px;
+  width: 900px;
+}

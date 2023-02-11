@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,15 +8,10 @@ namespace journalapp;
 
 public partial class JournalContext : IdentityDbContext<AspNetUser>
 {
-    public JournalContext()
-    {
-    }
-
     public JournalContext(DbContextOptions<JournalContext> options)
         : base(options)
     {
     }
-
 
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
@@ -77,6 +73,24 @@ public partial class JournalContext : IdentityDbContext<AspNetUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 base.OnModelCreating(modelBuilder);
+modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
+                Name = "admin",
+                NormalizedName = "ADMIN"
+            });
+
+            modelBuilder.Entity<AspNetUser>().HasData(new AspNetUser
+            {
+                Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                Email = "my@email.com",
+                NormalizedEmail = "MY@EMAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<AspNetUser>().HashPassword(null, "superpassword"),
+                SecurityStamp = string.Empty
+            });
         modelBuilder.Entity<AspNetUser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUsers");
@@ -349,10 +363,6 @@ base.OnModelCreating(modelBuilder);
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.Student).WithMany(p => p.Positions)
-                .HasForeignKey(d => d.StudentId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Positions_Students");
         });
 
         modelBuilder.Entity<RiskGroup>(entity =>

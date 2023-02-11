@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using journalapp.Data;
+using journalapp.Service;
 
 namespace journalapp;
 
@@ -14,14 +15,18 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddTransient<Datamanager>();
+        // TODO с этим надо что-то сделать
+        //builder.Services.AddTransient<Datamanager>();
 
         var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'JournalContextConnection' not found.");
 
          builder.Services.AddDbContext<JournalContext>(options => options.UseSqlServer(connectionString));
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews(x =>
+                {
+                    x.Conventions.Add(new AdminAreaAutorization("Admin", "AdminArea"));
+                });
 
 
         // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -78,7 +83,10 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Account}/{action=Login}/{id?}");
+        app.MapControllerRoute(
+            name:"admin", 
+            pattern:"{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 // app.MapRazorPages();
         app.Run();

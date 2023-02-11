@@ -1,20 +1,85 @@
 ﻿@{
-    ViewData["Title"] = "Журнал";
+    ViewData["Title"] = "Сводная информация по группе";
 }
+<div class="card win">
+<h1> @ViewData["Title"]</h1>
+  <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " for="inputGroupSelect02">Выберите год</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect02">
+    <option selected>2022</option>
+    <option value="1">2021</option>
+    <option value="2">2019</option>
+  </select>
+</div>
+ <input type="submit" class="btn btn-primary mb-3" style="width: 150px;" value="Сформировать">
+  <table class="table table-hover table-bordered"><thead>
+    <tr>
+        <th>Показатели</th>
+        <th>Значения</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>Численность группы</td>
+        <td></td>
+    </tr>
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Journalapp.styles.css" asp-append-version="true" />
-    <link rel="shortcut icon" href="~/images/logo-no-shadow.svg" type="image/x-icon"/>
-</head>
-<body>
-    <h1>В разработке</h1>
+     <tr>
+        <td>Юношей</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>Девушек</td>
+        <td></td>
+    </tr>
+
+     <tr>
+        <td>Проживают в общежитии</td>
+        <td></td>
+    </tr>
+    
+     <tr>
+        <td>Пед. учет</td>
+        <td></td>
+    </tr>
+    
+     <tr>
+        <td>Индивидуальные беседы</td>
+        <td></td>
+    </tr>
+    
+     <tr>
+        <td>Встречи с родителями</td>
+        <td></td>
+    </tr>
+     <tr>
+        <td>Количество сирот и детей ОБПР</td>
+        <td></td>
+    </tr>
+      <tr>
+        <td>Количество студентов с ОВЗ</td>
+        <td></td>
+    </tr>
+      <tr>
+        <td>Количество посещений общежития</td>
+        <td></td>
+    </tr>
+     <tr>
+        <td>Количество проведенных классных часов</td>
+        <td></td>
+    </tr>
+     <tr>
+        <td>Количество родительских собраний</td>
+        <td></td>
+    </tr>
+     <tr>
+        <td>Участие студентов во внеурочной деятельности</td>
+        <td></td>
+    </tr>
+</tbody>
+</table>
 </div>
 </div>
-</body>

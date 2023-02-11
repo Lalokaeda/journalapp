@@ -3,35 +3,57 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using journalapp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace journalapp.Controllers
 {
-    [Route("[controller]")]
+     [Authorize]
     public class AccountController : Controller
     {
-        private readonly ILogger<AccountController> _logger;
-
-        public AccountController(ILogger<AccountController> logger)
+     private readonly UserManager<AspNetUser> userManager;
+        private readonly SignInManager<AspNetUser> signInManager;
+        public AccountController(UserManager<AspNetUser> userMgr, SignInManager<AspNetUser> signinMgr)
         {
-            _logger = logger;
+            userManager = userMgr;
+            signInManager = signinMgr;
         }
 
-        public IActionResult Index()
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl)
         {
-            return View();
+            ViewBag.returnUrl = returnUrl;
+            return View(new LoginViewModel());
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                AspNetUser user = await userManager.FindByNameAsync(model.UserName);
+                if (user != null)
+                {
+                    await signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        return Redirect(returnUrl ?? "/");
+                    }
+                }
+                ModelState.AddModelError(nameof(LoginViewModel.UserName), "Неверный логин или пароль");
+            }
+            return View(model);
         }
 
-        public IActionResult login()
+        [Authorize]
+        public async Task<IActionResult> Logout()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

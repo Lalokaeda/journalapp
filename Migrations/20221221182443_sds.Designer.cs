@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using journalapp;
 
@@ -11,9 +12,11 @@ using journalapp;
 namespace journalapp.Migrations
 {
     [DbContext(typeof(JournalContext))]
-    partial class JournalContextModelSnapshot : ModelSnapshot
+    [Migration("20221221182443_sds")]
+    partial class sds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,13 +277,13 @@ namespace journalapp.Migrations
                         {
                             Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "72593db3-2b5b-44fd-8137-84e71861809d",
+                            ConcurrencyStamp = "399170d6-12ad-4ba3-a19c-3e2dd1ba7c45",
                             Email = "my@email.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MY@EMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA94KQur9Hh2vXXNa6LGNrz0tDM03IImpdb9ivaSzpi8GMTKVov/N43bKX3Dj7J7Kw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFP9zD/tT74Wp/GDQfvOnG802gtpQk70ZHF40PVwxxFQCFAnKjImlFAr8DgobSMo2A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -776,7 +779,12 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Positions");
                 });
@@ -902,9 +910,6 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int?>("PositionId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
@@ -925,8 +930,6 @@ namespace journalapp.Migrations
                     b.HasIndex("GroupId");
 
                     b.HasIndex("HealthGroupId");
-
-                    b.HasIndex("PositionId");
 
                     b.HasIndex("RoomId");
 
@@ -1329,6 +1332,17 @@ namespace journalapp.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("journalapp.Position", b =>
+                {
+                    b.HasOne("journalapp.Student", "Student")
+                        .WithMany("Positions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Positions_Students");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("journalapp.Room", b =>
                 {
                     b.HasOne("journalapp.Hostel", "Hostel")
@@ -1367,10 +1381,6 @@ namespace journalapp.Migrations
                         .HasForeignKey("HealthGroupId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_Students_HealthGroup");
-
-                    b.HasOne("journalapp.Position", null)
-                        .WithMany("Srudents")
-                        .HasForeignKey("PositionId");
 
                     b.HasOne("journalapp.Room", "Room")
                         .WithMany("Students")
@@ -1505,11 +1515,6 @@ namespace journalapp.Migrations
                     b.Navigation("WorkWithParents");
                 });
 
-            modelBuilder.Entity("journalapp.Position", b =>
-                {
-                    b.Navigation("Srudents");
-                });
-
             modelBuilder.Entity("journalapp.Room", b =>
                 {
                     b.Navigation("Students");
@@ -1527,6 +1532,8 @@ namespace journalapp.Migrations
                     b.Navigation("Curators");
 
                     b.Navigation("GraphicVisitsHostels");
+
+                    b.Navigation("Positions");
 
                     b.Navigation("StudentsOfEvents");
 

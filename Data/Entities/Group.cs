@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace journalapp;
 
 public partial class Group
-{
-    public string Id { get; set; } = null!;
+{ 
+     public string Id { get; set; } = null!;
 
     public string SpecialityId { get; set; } = null!;
 
