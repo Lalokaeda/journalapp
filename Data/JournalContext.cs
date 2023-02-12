@@ -91,6 +91,18 @@ modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
                 PasswordHash = new PasswordHasher<AspNetUser>().HashPassword(null, "superpassword"),
                 SecurityStamp = string.Empty
             });
+
+            modelBuilder.Entity<AspNetUser>().HasData(new AspNetUser
+            {
+                Id = "3b62422e-4a16-45fa-a20f-e7685b9565s9",
+                UserName = "Tutarova_v",
+                NormalizedUserName = "TUTAROVA_V",
+                Email = "vlastadev@gmail.com",
+                NormalizedEmail = "VLASTADEV@GMAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<AspNetUser>().HashPassword(null, "123321"),
+                SecurityStamp = string.Empty
+            });
         modelBuilder.Entity<AspNetUser>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUsers");

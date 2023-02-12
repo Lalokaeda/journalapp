@@ -68,12 +68,12 @@ body {
   border-color: #323C8D;
   margin-top: 15px;
   font-family: 'Arial', monospace;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 .form-control{
   margin-top: 15px;
     font-family: 'Arial', monospace;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .form-controlRed{
@@ -89,5 +89,11 @@ body {
 .win{
   margin: 10px;
   padding: 10px;
-  width: 900px;
+  /* width: 900px; */
+}
+
+.btn-right{
+margin-right: 2px;
+display: flex;
+justify-content: flex-end;
 }
