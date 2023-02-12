@@ -8,36 +8,36 @@ public partial class Student
 {
     public int Id { get; set; }
 
-[Required(ErrorMessage = "Заполните фамилию")]
+    [Required(ErrorMessage = "Заполните фамилию")]
     [Display(Name = "Фамилия")]
     public string Surname { get; set; } = null!;
 
-[Required(ErrorMessage = "Заполните имя")]
+    [Required(ErrorMessage = "Заполните имя")]
     [Display(Name = "Название имя")]
     public string Name { get; set; } = null!;
 
     [Display(Name = "Отчество")]
     public string? Patronymic { get; set; }
 
-[Required(ErrorMessage = "Выберите пол")]
+    [Required(ErrorMessage = "Выберите пол")]
     [Display(Name = "Пол")]
     public string Sex { get; set; } = null!;
 
     [Display(Name = "Группа здоровья")]
     public int? HealthGroupId { get; set; }
 
-[Required(ErrorMessage = "Заполните номер телефона")]
+    [Required(ErrorMessage = "Заполните номер телефона")]
     [Display(Name = "Номер телефона")]
     public string PhoneNum { get; set; } = null!;
 
     [Display(Name = "Электронная почта")]
     public string? Email { get; set; }
 
-[Required(ErrorMessage = "Заполните адрес")]
+    [Required(ErrorMessage = "Заполните адрес")]
     [Display(Name = "Адрес")]
     public string Address { get; set; } = null!;
 
-[Required(ErrorMessage = "Укажите группу")]
+    [Required(ErrorMessage = "Укажите группу")]
     [Display(Name = "Группа")]
     public string GroupId { get; set; } = null!;
 
@@ -53,7 +53,7 @@ public partial class Student
     [Display(Name = "Примечание")]
     public string? Note { get; set; }
 
-public int? PositionId { get; set; }
+    public int? PositionId { get; set; }
     public virtual ICollection<Business> Businesses { get; } = new List<Business>();
 
     public virtual ICollection<Curator> Curators { get; } = new List<Curator>();

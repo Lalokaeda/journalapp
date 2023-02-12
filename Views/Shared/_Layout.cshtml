@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="~/Journalapp.styles.css" asp-append-version="true" />
     <link rel="shortcut icon" href="~/images/logo-no-shadow.svg" type="image/x-icon"/>
 </head>
-<body>
-    <div class="wrapper">
+<body style="overflow-x: hidden;">
+ 
     <header style="height: 70px;">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-0">
 
@@ -42,7 +42,8 @@
             </div>
         </nav>
     </header>
-
+   @* <div class="wrapper container-fluid"> *@
+        <aside role="complementary">
   <div class="menu card win">
     <div class="container border-bottom">
     <h4 id="menuHeader">Навигация</h4>
@@ -91,7 +92,7 @@
     </ul>
     </nav>
   </div>
-
+</aside>
 
     <div class="container-fluid content" id="content">
         <main role="main" class="pb-3">
@@ -99,13 +100,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted" style="height: 60px;">
+
+        @* </div> *@
+    <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2022 - МпК - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     
-        </div>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

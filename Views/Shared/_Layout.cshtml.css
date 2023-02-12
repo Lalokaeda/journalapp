@@ -73,11 +73,12 @@ a {
 
 
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+  z-index: 1;
 }
 
 img.img-fluid{
@@ -88,6 +89,7 @@ img.img-fluid{
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  /* height: calc(100vh - 50px); */
 
 }
 .menu {
@@ -150,6 +152,7 @@ img.img-fluid{
 }
 #content{
   padding-left: 0px;
+  z-index: 2;
 }
 .content_active {
   transform: translateX(0%);

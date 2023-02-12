@@ -74,11 +74,12 @@ a[b-3tspz0la4m] {
 
 
 .footer[b-3tspz0la4m] {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+  z-index: 1;
 }
 
 img.img-fluid[b-3tspz0la4m]{
@@ -89,6 +90,7 @@ img.img-fluid[b-3tspz0la4m]{
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  /* height: calc(100vh - 50px); */
 
 }
 .menu[b-3tspz0la4m] {
@@ -151,6 +153,7 @@ img.img-fluid[b-3tspz0la4m]{
 }
 #content[b-3tspz0la4m]{
   padding-left: 0px;
+  z-index: 2;
 }
 .content_active[b-3tspz0la4m] {
   transform: translateX(0%);
