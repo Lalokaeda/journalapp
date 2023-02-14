@@ -43,20 +43,35 @@ namespace journalapp.Controllers
             return View(studentsList);
         }
 
-        public IActionResult Create()
-        { IEnumerable<SelectListItem> GroupsDropDown=_DBcontext.Groups.Select(i => new SelectListItem{
+        public IActionResult Create(int? Id)
+        { 
+            IEnumerable<SelectListItem> GroupsDropDown=_DBcontext.Groups.Select(i => new SelectListItem{
                 Text=i.Id,
                 Value=i.Id
             });
+            IEnumerable<SelectListItem> RoomsDropDown=_DBcontext.Rooms.Select(i => new SelectListItem{
+                Text= i.Hostel.Address+", комната №"+i.NumofRoom.ToString(),
+                Value=i.Id.ToString()
+            });
+
             ViewBag.GroupsDropDown=GroupsDropDown;
+            ViewBag.RoomsDropDown=RoomsDropDown;
+            if (Id==0)
             return View();
+            else {
+                Student currentStudent=_DBcontext.Students.Where(i=>i.Id==Id).FirstOrDefault();
+                return View(currentStudent);
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Student newsStudent)
         {
- _DBcontext.Students.Add(newsStudent);
+            if (newsStudent.Id !=0)
+            _DBcontext.Students.Update(newsStudent);
+            else
+            _DBcontext.Students.Add(newsStudent);
             _DBcontext.SaveChanges();
             return RedirectToAction("StudentList");
         }

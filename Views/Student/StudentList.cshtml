@@ -40,6 +40,12 @@
         {
             <td></td>
         }
+        <td class="text-center">
+    <a class="btn btn-secondary" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
+    @if (!student.IsExpelled){
+ <a class="btn btn-red" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Отчислен</a>
+    }
+        </td>
     </tr>
    }
 

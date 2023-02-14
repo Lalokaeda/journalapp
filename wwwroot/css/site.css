@@ -70,6 +70,23 @@ body {
   font-family: 'Arial', monospace;
   border-radius: 8px;
 }
+
+.btn-secondary{
+  background-color: #BBA474;
+  border-color: #BBA474;
+  margin-top: 15px;
+  font-family: 'Arial', monospace;
+  border-radius: 8px;
+}
+
+.btn-red{
+  background-color: #E31E34;
+  border-color: #E31E34;
+  margin-top: 15px;
+  font-family: 'Arial', monospace;
+  border-radius: 8px;
+}
+
 .form-control{
   margin-top: 15px;
     font-family: 'Arial', monospace;
