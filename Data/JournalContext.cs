@@ -447,6 +447,11 @@ modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("FK_Students_Rooms");
 
+            entity.HasOne(d => d.Position).WithMany(p => p.Students)
+                .HasForeignKey(d => d.PositionId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Students_Positions");
+
             entity.HasMany(d => d.Reasons).WithMany(p => p.Students)
                 .UsingEntity<Dictionary<string, object>>(
                     "StudentsOfRiskGroup",

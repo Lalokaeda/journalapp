@@ -274,13 +274,13 @@ namespace journalapp.Migrations
                         {
                             Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a58eada7-04a7-4e41-be37-7cfb5c9689b7",
+                            ConcurrencyStamp = "e774dab2-c5f5-4380-8572-afcabd0f5d66",
                             Email = "my@email.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MY@EMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGtxSNINAUfWAxPhTIsFiZe7lOTmbRumrhWs5LAD1lj40TeDtjL89FKfn+ukxcZLSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEEIh8zDaZNJO+L6ptOiJbFXETBzYxBMWxZTItVySFEV2ify5TyEfnx4+ZwQVT5dmQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -290,13 +290,13 @@ namespace journalapp.Migrations
                         {
                             Id = "3b62422e-4a16-45fa-a20f-e7685b9565s9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c65bd3aa-4417-4bf4-ae22-d73cc9931f47",
+                            ConcurrencyStamp = "cb3d3bbe-9cd9-4ee0-9224-1b1a966fc8c2",
                             Email = "vlastadev@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "VLASTADEV@GMAIL.COM",
                             NormalizedUserName = "TUTAROVA_V",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKIxtsHVCXfyM0DnScXCQKrsTtlDgP4uBB/tRqDtxDL0zHBjEHJpd9+GvpaH8OQbZg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELq6Yzp7Hjzdt3FNdaiULGcF9Oz9kOGRQ6ZkYvNW2U05TSRKSIF4D+OdLred/PWLrQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -1384,9 +1384,11 @@ namespace journalapp.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_Students_HealthGroup");
 
-                    b.HasOne("journalapp.Position", null)
+                    b.HasOne("journalapp.Position", "Position")
                         .WithMany("Students")
-                        .HasForeignKey("PositionId");
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Students_Positions");
 
                     b.HasOne("journalapp.Room", "Room")
                         .WithMany("Students")
@@ -1397,6 +1399,8 @@ namespace journalapp.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("HealthGroup");
+
+                    b.Navigation("Position");
 
                     b.Navigation("Room");
                 });

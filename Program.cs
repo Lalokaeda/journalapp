@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using journalapp.Data;
 using journalapp.Service;
-
+using journalapp;
 namespace journalapp;
 
 public class Program
@@ -20,7 +20,18 @@ public class Program
 
         var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'JournalContextConnection' not found.");
 
-         builder.Services.AddDbContext<JournalContext>(options => options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<JournalContext>(options => 
+        options.UseSqlServer(connectionString));
+
+        builder.Services.AddDefaultIdentity<AspNetUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<JournalContext>();
+
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSession(options =>
+        {
+        options.IdleTimeout=TimeSpan.FromMinutes(45);
+        options.Cookie.HttpOnly=true;
+        options.Cookie.IsEssential=true;
+        });
 
         // Add services to the container.
         builder.Services.AddControllersWithViews(x =>
@@ -80,6 +91,8 @@ public class Program
         app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
+        
+        app.UseSession();
 
         app.MapControllerRoute(
             name: "default",

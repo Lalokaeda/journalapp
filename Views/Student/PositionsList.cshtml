@@ -1,0 +1,39 @@
+@model List<Student>
+@{
+    ViewData["Title"] = "Организация самоуправления";
+}
+
+<div class="card win">
+<h1> @ViewData["Title"]</h1>
+ <div class="card-body">
+    <table class="table table-hover table-bordered"><thead>
+    <tr>
+        <th>Должность</th>
+        <th>Студент</th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+   @foreach (var stud in Model)
+   {
+    <tr>
+        <td>@stud.Position.Name</td>
+        <td>@if (stud.Patronymic!=null)
+            {
+               String.Concat(stud.Surname, " ", stud.Name, " ", stud.Patronymic);
+            }
+            else
+            {
+                String.Concat(stud.Surname, " ", stud.Name);
+            }
+        </td>
+        <td class="text-center">
+    <a class="btn btn-secondary w-100" asp-area="" asp-controller="Student" asp-route-Id="@stud.PositionId" asp-action="AddStudentOnPosition">Редактировать</a>
+        </td>
+    </tr>
+   }
+
+</tbody>
+</table>
+</div>
+</div>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using journalapp.Data;
+using journalapp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -74,6 +75,43 @@ namespace journalapp.Controllers
             _DBcontext.Students.Add(newsStudent);
             _DBcontext.SaveChanges();
             return RedirectToAction("StudentList");
+        }
+
+       public IActionResult PositionsList()
+        {
+          List<Student> studsWithPos = _DBcontext.Students.Where(i=>i.PositionId!=0).ToList();
+          return View(studsWithPos);
+        }
+
+        public IActionResult AddStudentOnPosition()
+        {
+             List<Position> positions=_DBcontext.Positions.ToList();
+            List<PositionsViewModel> positionsViewModels = new List<PositionsViewModel>();
+            List<Student> studentsWithoutPosition=_DBcontext.Students.Where(i=>i.PositionId==0).ToList();
+            foreach(var obj in positions)
+            {
+                PositionsViewModel posVM= new PositionsViewModel{
+            Position=obj,
+            StudentsSelectList=studentsWithoutPosition.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
+                Text= i.Surname+" "+i.Name+" " + i.Patronymic,
+                Value=i.Id.ToString()
+                }).ToList()
+            };
+             try
+                {
+                  posVM.StudentsSelectList.AddRange(studentsWithoutPosition.Where(i=>i.Patronymic==null).Select(i => new SelectListItem{
+                Text= i.Surname+" "+i.Name,
+                Value=i.Id.ToString()
+                }).ToList());
+                }
+                catch (System.Exception)
+                {
+                    
+                    throw;
+                }
+            positionsViewModels.Add(posVM);
+            }
+            return View(positionsViewModels);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -281,3 +281,4 @@ D:\journalapp\obj\Debug\net7.0\refint\journalapp.dll
 D:\journalapp\obj\Debug\net7.0\journalapp.pdb
 D:\journalapp\obj\Debug\net7.0\journalapp.genruntimeconfig.cache
 D:\journalapp\obj\Debug\net7.0\ref\journalapp.dll
+D:\journalapp\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
