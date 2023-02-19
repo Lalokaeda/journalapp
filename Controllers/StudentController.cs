@@ -61,8 +61,34 @@ namespace journalapp.Controllers
 
        public IActionResult PositionsList()
         {
-          List<Student> studsWithPos = _DBcontext.Students.Where(i=>i.PositionId!=0).ToList();
-          return View(studsWithPos);
+            List<Position> positions=_DBcontext.Positions.ToList();
+            List<PositionsViewModel> positionsViewModels = new List<PositionsViewModel>();
+            List<Student> students=_DBcontext.Students.ToList();
+            foreach(var obj in positions)
+            {
+                PositionsViewModel posVM= new PositionsViewModel{
+            Position=obj,
+            CurStudent=students.Where(i=> i.Position==obj).FirstOrDefault(),
+            StudentsSelectList=students.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
+                Text= i.Surname+" "+i.Name+" " + i.Patronymic,
+                Value=i.Id.ToString()
+                }).ToList()
+            };
+             try
+                {
+                  posVM.StudentsSelectList.AddRange(students.Where(i=>i.Patronymic==null).Select(i => new SelectListItem{
+                Text= i.Surname+" "+i.Name,
+                Value=i.Id.ToString()
+                }).ToList());
+                }
+                catch (System.Exception)
+                {
+                    
+                    throw;
+                }
+            positionsViewModels.Add(posVM);
+            }
+            return View(positionsViewModels);
         }
 
         public IActionResult AddStudentOnPosition()

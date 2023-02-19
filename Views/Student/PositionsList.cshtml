@@ -1,4 +1,5 @@
-@model List<Student>
+@using journalapp.ViewModels
+@model List<PositionsViewModel>
 @{
     ViewData["Title"] = "Организация самоуправления";
 }
@@ -14,21 +15,26 @@
     </tr>
 </thead>
 <tbody>
-   @foreach (var stud in Model)
+   @foreach (var pos in Model)
    {
     <tr>
-        <td>@stud.Position.Name</td>
-        <td>@if (stud.Patronymic!=null)
+        <td>@pos.Position.Name</td>
+        @if(pos.CurStudent!=null){
+        @if (pos.CurStudent.Patronymic!=null)
             {
-               String.Concat(stud.Surname, " ", stud.Name, " ", stud.Patronymic);
+              <td>@String.Concat(pos.CurStudent.Surname, " ", pos.CurStudent.Name, " ", pos.CurStudent.Patronymic);</td>
             }
             else
             {
-                String.Concat(stud.Surname, " ", stud.Name);
+                <td>@String.Concat(pos.CurStudent.Surname, " ", pos.CurStudent.Name)</td>
             }
-        </td>
+        
+        }
+        else{
+            <td></td>
+        }
         <td class="text-center">
-    <a class="btn btn-secondary w-100" asp-area="" asp-controller="Student" asp-route-Id="@stud.PositionId" asp-action="AddStudentOnPosition">Редактировать</a>
+    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@pos.Position.Id" asp-action="AddStudentOnPosition">Редактировать</a>
         </td>
     </tr>
    }
