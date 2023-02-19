@@ -17,9 +17,9 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly UserManager<Emp> _userManager;
 
-        public ResetPasswordModel(UserManager<AspNetUser> userManager)
+        public ResetPasswordModel(UserManager<Emp> userManager)
         {
             _userManager = userManager;
         }

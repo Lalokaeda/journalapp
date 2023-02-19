@@ -17,13 +17,13 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
+        private readonly UserManager<Emp> _userManager;
         private readonly ILogger<LoginWith2faModel> _logger;
 
         public LoginWith2faModel(
-            SignInManager<AspNetUser> signInManager,
-            UserManager<AspNetUser> userManager,
+            SignInManager<Emp> signInManager,
+            UserManager<Emp> userManager,
             ILogger<LoginWith2faModel> logger)
         {
             _signInManager = signInManager;

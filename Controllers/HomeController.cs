@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using journalapp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace journalapp.Controllers;
 
+//[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

@@ -14,7 +14,7 @@ public partial class Student
     public string Surname { get; set; } = null!;
 
     [Required(ErrorMessage = "Заполните имя")]
-    [Display(Name = "Название имя")]
+    [Display(Name = "Имя")]
     public string Name { get; set; } = null!;
 
     [Display(Name = "Отчество")]

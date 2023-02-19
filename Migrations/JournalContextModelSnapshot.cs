@@ -17,7 +17,7 @@ namespace journalapp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,14 +47,6 @@ namespace journalapp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -98,7 +90,7 @@ namespace journalapp.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -120,7 +112,7 @@ namespace journalapp.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -132,7 +124,7 @@ namespace journalapp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
@@ -147,7 +139,7 @@ namespace journalapp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -193,117 +185,6 @@ namespace journalapp.Migrations
                     b.ToTable("StudentsOfRiskGroup", (string)null);
                 });
 
-            modelBuilder.Entity("journalapp.AspNetUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClassTeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_dbo.AspNetUsers");
-
-                    b.HasIndex("ClassTeacherId");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex(new[] { "UserName" }, "UserNameIndex")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex1")
-                        .HasFilter("[UserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e774dab2-c5f5-4380-8572-afcabd0f5d66",
-                            Email = "my@email.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MY@EMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEEIh8zDaZNJO+L6ptOiJbFXETBzYxBMWxZTItVySFEV2ify5TyEfnx4+ZwQVT5dmQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = "3b62422e-4a16-45fa-a20f-e7685b9565s9",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb3d3bbe-9cd9-4ee0-9224-1b1a966fc8c2",
-                            Email = "vlastadev@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "VLASTADEV@GMAIL.COM",
-                            NormalizedUserName = "TUTAROVA_V",
-                            PasswordHash = "AQAAAAIAAYagAAAAELq6Yzp7Hjzdt3FNdaiULGcF9Oz9kOGRQ6ZkYvNW2U05TSRKSIF4D+OdLred/PWLrQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "Tutarova_v"
-                        });
-                });
-
             modelBuilder.Entity("journalapp.Business", b =>
                 {
                     b.Property<int>("Id")
@@ -336,34 +217,6 @@ namespace journalapp.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Business", (string)null);
-                });
-
-            modelBuilder.Entity("journalapp.ClassTeacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(150)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Patronymic")
-                        .HasMaxLength(150)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Surname")
-                        .HasMaxLength(200)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClassTeachers");
                 });
 
             modelBuilder.Entity("journalapp.CommunicationHour", b =>
@@ -471,11 +324,12 @@ namespace journalapp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClassTeacherId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
+
+                    b.Property<string>("EmpId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Lobid")
                         .HasColumnType("int")
@@ -489,11 +343,85 @@ namespace journalapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassTeacherId");
+                    b.HasIndex("EmpId");
 
                     b.HasIndex("Lobid");
 
                     b.ToTable("EducativeEvents");
+                });
+
+            modelBuilder.Entity("journalapp.Emp", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Patronymic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("journalapp.Event", b =>
@@ -559,8 +487,9 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
 
-                    b.Property<int>("ClassTeacherId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmpId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("RecruitmentYear")
                         .HasColumnType("date");
@@ -573,7 +502,7 @@ namespace journalapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassTeacherId");
+                    b.HasIndex("EmpId");
 
                     b.HasIndex("SpecialityId");
 
@@ -1124,7 +1053,7 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("journalapp.AspNetUser", null)
+                    b.HasOne("journalapp.Emp", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1133,7 +1062,7 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("journalapp.AspNetUser", null)
+                    b.HasOne("journalapp.Emp", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1148,7 +1077,7 @@ namespace journalapp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("journalapp.AspNetUser", null)
+                    b.HasOne("journalapp.Emp", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1157,7 +1086,7 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("journalapp.AspNetUser", null)
+                    b.HasOne("journalapp.Emp", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1195,16 +1124,6 @@ namespace journalapp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_StudentsOfRiskGroup_Students");
-                });
-
-            modelBuilder.Entity("journalapp.AspNetUser", b =>
-                {
-                    b.HasOne("journalapp.ClassTeacher", "ClassTeacher")
-                        .WithMany("AspNetUsers")
-                        .HasForeignKey("ClassTeacherId")
-                        .HasConstraintName("FK_AspNetUsers_ClassTeachers");
-
-                    b.Navigation("ClassTeacher");
                 });
 
             modelBuilder.Entity("journalapp.Business", b =>
@@ -1270,12 +1189,12 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("journalapp.EducativeEvent", b =>
                 {
-                    b.HasOne("journalapp.ClassTeacher", "ClassTeacher")
+                    b.HasOne("journalapp.Emp", "Emp")
                         .WithMany("EducativeEvents")
-                        .HasForeignKey("ClassTeacherId")
+                        .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_EducativeEvents_ClassTeachers");
+                        .HasConstraintName("FK_EducativeEvents_Emps");
 
                     b.HasOne("journalapp.LineOfBusiness", "Lob")
                         .WithMany("EducativeEvents")
@@ -1284,7 +1203,7 @@ namespace journalapp.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_EducativeEvents_LineOfBusiness");
 
-                    b.Navigation("ClassTeacher");
+                    b.Navigation("Emp");
 
                     b.Navigation("Lob");
                 });
@@ -1303,12 +1222,12 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("journalapp.Group", b =>
                 {
-                    b.HasOne("journalapp.ClassTeacher", "ClassTeacher")
+                    b.HasOne("journalapp.Emp", "Emp")
                         .WithMany("Groups")
-                        .HasForeignKey("ClassTeacherId")
+                        .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_Groups_ClassTeachers");
+                        .HasConstraintName("FK_Groups_Emps");
 
                     b.HasOne("journalapp.Speciality", "Speciality")
                         .WithMany("Groups")
@@ -1317,7 +1236,7 @@ namespace journalapp.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Groups_Specialities");
 
-                    b.Navigation("ClassTeacher");
+                    b.Navigation("Emp");
 
                     b.Navigation("Speciality");
                 });
@@ -1471,18 +1390,16 @@ namespace journalapp.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("journalapp.ClassTeacher", b =>
-                {
-                    b.Navigation("AspNetUsers");
-
-                    b.Navigation("EducativeEvents");
-
-                    b.Navigation("Groups");
-                });
-
             modelBuilder.Entity("journalapp.Division", b =>
                 {
                     b.Navigation("Specialities");
+                });
+
+            modelBuilder.Entity("journalapp.Emp", b =>
+                {
+                    b.Navigation("EducativeEvents");
+
+                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("journalapp.Event", b =>

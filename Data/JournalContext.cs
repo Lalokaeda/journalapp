@@ -6,19 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace journalapp;
 
-public partial class JournalContext : IdentityDbContext<AspNetUser>
+public partial class JournalContext : IdentityDbContext<Emp>
 {
     public JournalContext(DbContextOptions<JournalContext> options)
         : base(options)
     {
     }
 
-    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-
+    public virtual DbSet<Emp> Emps { get; set; }
 
     public virtual DbSet<Business> Businesses { get; set; }
-
-    public virtual DbSet<ClassTeacher> ClassTeachers { get; set; }
 
     public virtual DbSet<CommunicationHour> CommunicationHours { get; set; }
 
@@ -73,50 +70,7 @@ public partial class JournalContext : IdentityDbContext<AspNetUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 base.OnModelCreating(modelBuilder);
-modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
-            {
-                Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
-                Name = "admin",
-                NormalizedName = "ADMIN"
-            });
 
-            modelBuilder.Entity<AspNetUser>().HasData(new AspNetUser
-            {
-                Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
-                Email = "my@email.com",
-                NormalizedEmail = "MY@EMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = new PasswordHasher<AspNetUser>().HashPassword(null, "superpassword"),
-                SecurityStamp = string.Empty
-            });
-
-            modelBuilder.Entity<AspNetUser>().HasData(new AspNetUser
-            {
-                Id = "3b62422e-4a16-45fa-a20f-e7685b9565s9",
-                UserName = "Tutarova_v",
-                NormalizedUserName = "TUTAROVA_V",
-                Email = "vlastadev@gmail.com",
-                NormalizedEmail = "VLASTADEV@GMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = new PasswordHasher<AspNetUser>().HashPassword(null, "123321"),
-                SecurityStamp = string.Empty
-            });
-        modelBuilder.Entity<AspNetUser>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetUsers");
-
-            entity.HasIndex(e => e.UserName, "UserNameIndex").IsUnique();
-
-            entity.Property(e => e.Id).HasMaxLength(128);
-            entity.Property(e => e.Email).HasMaxLength(256);
-            entity.Property(e => e.UserName).HasMaxLength(256);
-
-            entity.HasOne(d => d.ClassTeacher).WithMany(p => p.AspNetUsers)
-                .HasForeignKey(d => d.ClassTeacherId)
-                .HasConstraintName("FK_AspNetUsers_ClassTeachers");
-    });
 
       
         modelBuilder.Entity<Business>(entity =>
@@ -138,18 +92,6 @@ modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
                 .HasConstraintName("FK_Business_Students");
         });
 
-        modelBuilder.Entity<ClassTeacher>(entity =>
-        {
-            entity.Property(e => e.Name)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Patronymic)
-                .HasMaxLength(150)
-                .IsUnicode(false);
-            entity.Property(e => e.Surname)
-                .HasMaxLength(200)
-                .IsUnicode(false);
-        });
 
         modelBuilder.Entity<CommunicationHour>(entity =>
         {
@@ -216,9 +158,9 @@ modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
                 .HasMaxLength(200)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.ClassTeacher).WithMany(p => p.EducativeEvents)
-                .HasForeignKey(d => d.ClassTeacherId)
-                .HasConstraintName("FK_EducativeEvents_ClassTeachers");
+            entity.HasOne(d => d.Emp).WithMany(p => p.EducativeEvents)
+                .HasForeignKey(d => d.EmpId)
+                .HasConstraintName("FK_EducativeEvents_Emps");
 
             entity.HasOne(d => d.Lob).WithMany(p => p.EducativeEvents)
                 .HasForeignKey(d => d.Lobid)
@@ -260,9 +202,9 @@ modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
                 .HasMaxLength(8)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.ClassTeacher).WithMany(p => p.Groups)
-                .HasForeignKey(d => d.ClassTeacherId)
-                .HasConstraintName("FK_Groups_ClassTeachers");
+            entity.HasOne(d => d.Emp).WithMany(p => p.Groups)
+                .HasForeignKey(d => d.EmpId)
+                .HasConstraintName("FK_Groups_Emps");
 
             entity.HasOne(d => d.Speciality).WithMany(p => p.Groups)
                 .HasForeignKey(d => d.SpecialityId)

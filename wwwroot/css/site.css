@@ -114,3 +114,14 @@ margin-right: 2px;
 display: flex;
 justify-content: flex-end;
 }
+.link-secondary{
+  text-decoration-color: #BBA474;
+  color: #BBA474;
+}
+.text-danger{
+  color: #E31E34;
+}
+.link-danger{
+  color: #E31E34;
+  text-decoration-color: #E31E34;
+}

@@ -14,12 +14,12 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
 
         public SetPasswordModel(
-            UserManager<AspNetUser> userManager,
-            SignInManager<AspNetUser> signInManager)
+            UserManager<Emp> userManager,
+            SignInManager<Emp> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

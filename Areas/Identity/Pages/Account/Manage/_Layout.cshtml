@@ -1,9 +1,9 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    try
     {
-        Layout = parentLayout.ToString();
+        Layout ="/Views/Shared/_Layout.cshtml";
     }
-    else
+    catch
     {
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }

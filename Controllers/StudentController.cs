@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using journalapp.Data;
 using journalapp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,23 +19,6 @@ namespace journalapp.Controllers
             _DBcontext=context;
         }
 
-
-        public IActionResult Edit(int Id)
-        {
-            var entity = Datamanager.student.GetStudentsById(Id);
-            return View(entity);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Student model)
-        {
-            if (ModelState.IsValid)
-            {
-                Datamanager.student.SaveStudents(model);
-                return RedirectToAction();
-            }
-            return View(model);
-        }
 
         public IActionResult StudentList()
         {

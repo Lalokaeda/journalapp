@@ -20,10 +20,13 @@
 <tbody>
    @foreach (var student in Model)
    {
+    @if(!student.IsExpelled)
+    {
     <tr>
         <td>@student.Surname</td>
         <td>@student.Name</td>
-        @if(student.Patronymic!=null){
+        @if(student.Patronymic!=null)
+        {
             <td>@student.Patronymic</td>
         }
         else 
@@ -33,20 +36,54 @@
         <td>@student.Sex</td>
         <td>@student.PhoneNum</td>
         <td>@student.Email</td>
-         @if(student.Note!=null){
+         @if(student.Note!=null)
+         {
             <td>@student.Note</td>
         }
         else 
         {
             <td></td>
         }
+
         <td class="text-center">
-    <a class="btn btn-secondary" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
-    @if (!student.IsExpelled){
- <a class="btn btn-red" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Отчислен</a>
-    }
+            <div class="btn-group">
+    <a class="link-secondary mx-1" style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
+ <a class="link-danger mx-1"style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Отчислен</a>
+    </div>
         </td>
     </tr>
+            }
+    else{
+        <tr class="text-danger">
+        <td>@student.Surname</td>
+        <td>@student.Name</td>
+        @if(student.Patronymic!=null)
+        {
+            <td>@student.Patronymic</td>
+        }
+        else 
+        {
+            <td></td>
+        }
+        <td>@student.Sex</td>
+        <td>@student.PhoneNum</td>
+        <td>@student.Email</td>
+         @if(student.Note!=null)
+         {
+            <td>@student.Note</td>
+        }
+        else 
+        {
+            <td></td>
+        }
+
+        <td class="text-center">
+            <div class="btn-group">
+    <a class="link-secondary mx-1" style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
+    </div>
+        </td>
+    </tr>
+    }
    }
 
 </tbody>

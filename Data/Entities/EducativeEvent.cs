@@ -11,11 +11,11 @@ public partial class EducativeEvent
 
     public int Lobid { get; set; }
 
-    public int ClassTeacherId { get; set; }
+    public string EmpId { get; set; }
 
     public DateTime Date { get; set; }
 
-    public virtual ClassTeacher ClassTeacher { get; set; } = null!;
+    public virtual Emp Emp { get; set; } = null!;
 
     public virtual LineOfBusiness Lob { get; set; } = null!;
 }

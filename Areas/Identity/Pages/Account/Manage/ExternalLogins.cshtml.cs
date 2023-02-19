@@ -17,14 +17,14 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly IUserStore<AspNetUser> _userStore;
+        private readonly UserManager<Emp> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
+        private readonly IUserStore<Emp> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<AspNetUser> userManager,
-            SignInManager<AspNetUser> signInManager,
-            IUserStore<AspNetUser> userStore)
+            UserManager<Emp> userManager,
+            SignInManager<Emp> signInManager,
+            IUserStore<Emp> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -70,7 +70,7 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<AspNetUser> userPasswordStore)
+            if (_userStore is IUserPasswordStore<Emp> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }

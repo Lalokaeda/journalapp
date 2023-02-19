@@ -15,12 +15,12 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
 
         public IndexModel(
-            UserManager<AspNetUser> userManager,
-            SignInManager<AspNetUser> signInManager)
+            UserManager<Emp> userManager,
+            SignInManager<Emp> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -61,7 +61,7 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(AspNetUser user)
+        private async Task LoadAsync(Emp user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

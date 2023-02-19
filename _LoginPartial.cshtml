@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Identity
 @using journalapp
 
-@inject SignInManager<AspNetUser> SignInManager
-@inject UserManager<AspNetUser> UserManager
+@inject SignInManager<Emp> SignInManager
+@inject UserManager<Emp> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

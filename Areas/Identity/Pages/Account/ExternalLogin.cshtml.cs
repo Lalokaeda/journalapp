@@ -24,17 +24,17 @@ namespace journalapp.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly IUserStore<AspNetUser> _userStore;
-        private readonly IUserEmailStore<AspNetUser> _emailStore;
+        private readonly SignInManager<Emp> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly IUserStore<Emp> _userStore;
+        private readonly IUserEmailStore<Emp> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<AspNetUser> signInManager,
-            UserManager<AspNetUser> userManager,
-            IUserStore<AspNetUser> userStore,
+            SignInManager<Emp> signInManager,
+            UserManager<Emp> userManager,
+            IUserStore<Emp> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -198,27 +198,27 @@ namespace journalapp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private AspNetUser CreateUser()
+        private Emp CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<AspNetUser>();
+                return Activator.CreateInstance<Emp>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(AspNetUser)}'. " +
-                    $"Ensure that '{nameof(AspNetUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Emp)}'. " +
+                    $"Ensure that '{nameof(Emp)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
             }
         }
 
-        private IUserEmailStore<AspNetUser> GetEmailStore()
+        private IUserEmailStore<Emp> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<AspNetUser>)_userStore;
+            return (IUserEmailStore<Emp>)_userStore;
         }
     }
 }

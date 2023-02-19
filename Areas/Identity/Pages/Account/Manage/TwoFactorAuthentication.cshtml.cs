@@ -14,12 +14,12 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class TwoFactorAuthenticationModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
         private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+            UserManager<Emp> userManager, SignInManager<Emp> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;

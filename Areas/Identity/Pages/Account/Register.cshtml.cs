@@ -24,19 +24,21 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly IUserStore<AspNetUser> _userStore;
-        private readonly IUserEmailStore<AspNetUser> _emailStore;
+        private readonly SignInManager<Emp> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly IUserStore<Emp> _userStore;
+        private readonly IUserEmailStore<Emp> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
-            UserManager<AspNetUser> userManager,
-            IUserStore<AspNetUser> userStore,
-            SignInManager<AspNetUser> signInManager,
+            UserManager<Emp> userManager,
+            IUserStore<Emp> userStore,
+            SignInManager<Emp> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +46,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -71,6 +74,7 @@ namespace journalapp.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -87,7 +91,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Пароль")]
             public string Password { get; set; }
 
             /// <summary>
@@ -95,14 +99,33 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Подтверждение пароля")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+              /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Display(Name = "Имя")]
+            public string Name { get; set; }
+
+            [Display(Name = "Фамилия")]
+            public string Surname { get; set; }
+
+            [Display(Name = "Отчество")]
+            public string? Patronymic { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if(!await _roleManager.RoleExistsAsync(WC.AdminRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(WC.AdminRole));
+                await _roleManager.CreateAsync(new IdentityRole(WC.PrepodRole));
+            }
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -114,15 +137,18 @@ namespace journalapp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.Name=Input.Name;
+                user.Surname=Input.Surname;
+                if(Input.Patronymic!=null)
+                user.Patronymic=Input.Patronymic;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, WC.PrepodRole);
                     _logger.LogInformation("User created a new account with password.");
-
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -155,27 +181,27 @@ namespace journalapp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private AspNetUser CreateUser()
+        private Emp CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<AspNetUser>();
+                return Activator.CreateInstance<Emp>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(AspNetUser)}'. " +
-                    $"Ensure that '{nameof(AspNetUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Emp)}'. " +
+                    $"Ensure that '{nameof(Emp)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<AspNetUser> GetEmailStore()
+        private IUserEmailStore<Emp> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<AspNetUser>)_userStore;
+            return (IUserEmailStore<Emp>)_userStore;
         }
     }
 }

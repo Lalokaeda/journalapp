@@ -20,6 +20,11 @@ h1[b-3tspz0la4m], h2[b-3tspz0la4m], h3[b-3tspz0la4m], h4[b-3tspz0la4m], h5[b-3ts
    align-self: flex-start; 
    margin: 4px;
 }
+#LoginPartial[b-3tspz0la4m]{
+  flex-direction: row;
+  align-self: flex-end;
+  justify-content: flex-end;
+}
 
 @media (max-width: 480px) {
   .navbar-brand[b-3tspz0la4m] {

@@ -18,11 +18,11 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class DownloadPersonalDataModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly UserManager<Emp> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
 
         public DownloadPersonalDataModel(
-            UserManager<AspNetUser> userManager,
+            UserManager<Emp> userManager,
             ILogger<DownloadPersonalDataModel> logger)
         {
             _userManager = userManager;
@@ -46,7 +46,7 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 
             // Only include personal data for download
             var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(AspNetUser).GetProperties().Where(
+            var personalDataProps = typeof(Emp).GetProperties().Where(
                             prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
             foreach (var p in personalDataProps)
             {

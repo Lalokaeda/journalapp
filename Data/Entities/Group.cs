@@ -12,9 +12,9 @@ public partial class Group
 
     public DateTime RecruitmentYear { get; set; }
 
-    public int ClassTeacherId { get; set; }
+    public string EmpId { get; set; }
 
-    public virtual ClassTeacher ClassTeacher { get; set; } = null!;
+    public virtual Emp Emp { get; set; } = null!;
 
     public virtual ICollection<CommunicationHour> CommunicationHours { get; } = new List<CommunicationHour>();
 

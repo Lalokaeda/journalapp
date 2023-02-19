@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace journalapp.Data.Repositories
+namespace journalapp.Models
 {
-    public class LineOfBusRepos
+    public class SessionInf
     {
-        
+        public int CurrentGroupId {get; set;}
     }
 }

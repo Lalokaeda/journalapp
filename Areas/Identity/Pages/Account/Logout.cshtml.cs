@@ -15,10 +15,10 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly SignInManager<Emp> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<AspNetUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<Emp> signInManager, ILogger<LogoutModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

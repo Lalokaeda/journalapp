@@ -17,9 +17,9 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly UserManager<Emp> _userManager;
 
-        public ConfirmEmailModel(UserManager<AspNetUser> userManager)
+        public ConfirmEmailModel(UserManager<Emp> userManager)
         {
             _userManager = userManager;
         }

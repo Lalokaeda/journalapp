@@ -15,13 +15,13 @@ namespace journalapp.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<AspNetUser> _userManager;
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly UserManager<Emp> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<AspNetUser> userManager,
-            SignInManager<AspNetUser> signInManager,
+            UserManager<Emp> userManager,
+            SignInManager<Emp> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;

@@ -15,13 +15,13 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
-        private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<Emp> _signInManager;
+        private readonly UserManager<Emp> _userManager;
         private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
 
         public LoginWithRecoveryCodeModel(
-            SignInManager<AspNetUser> signInManager,
-            UserManager<AspNetUser> userManager,
+            SignInManager<Emp> signInManager,
+            UserManager<Emp> userManager,
             ILogger<LoginWithRecoveryCodeModel> logger)
         {
             _signInManager = signInManager;

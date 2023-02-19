@@ -20,10 +20,10 @@ namespace journalapp.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<AspNetUser> _signInManager;
+        private readonly SignInManager<Emp> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<AspNetUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<Emp> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -65,7 +65,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Введите почту")]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -73,7 +73,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Введите пароль")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -81,7 +81,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Запомнить меня")]
             public bool RememberMe { get; set; }
         }
 
@@ -89,7 +89,7 @@ namespace journalapp.Areas.Identity.Pages.Account
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
+                ModelState.AddModelError(string.Empty, "Неверный логин или пароль!");
             }
 
             returnUrl ??= Url.Content("~/");
