@@ -21,16 +21,19 @@ namespace journalapp.Controllers
             _DBcontext = context;
         }
 
-        // public IActionResult BusinessList()
-        // {
-        //     List<Business> businessList=_DBcontext.Businesses.Include(i=>i.Student).Include(i=>i.StudentAssotiation).OrderBy(i=>i.Student.IsExpelled).ThenBy(i=>i.Student.Surname).ToList();
-        //     return View(businessList);
-        // }
+        public IActionResult BusinessList()
+        {
+            List<Business> businessList=_DBcontext.Businesses.Where(i=>i.Student.Expelleds.Count==0&&i.Student.InAcadems.Count==0)
+                                                                .Include(i=>i.Student).Include(i=>i.StudentAssotiation)
+                                                                .OrderBy(i=>i.Student.Surname).AsNoTracking().ToList();
+            return View(businessList);
+        }
 
         public IActionResult AddEdit(int? Id)
         {   
             BusinessViewModel currentBusiness=new BusinessViewModel{
-                StudentsList=_DBcontext.Students.Select(i=> new SelectListItem{
+                StudentsList=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0)
+                                                .Select(i=> new SelectListItem{
                     Text=i.GetShortName(),
                     Value=i.Id.ToString()
                 }).ToList(),

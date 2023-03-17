@@ -62,20 +62,22 @@ namespace journalapp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Student newsStudent)
+        public IActionResult Create(StudentViewModel newsStudent)
         {
-            if (newsStudent.Id !=0)
-            _DBcontext.Students.Update(newsStudent);
-            else{
-                if(newsStudent.RoomId!=0)
-                newsStudent.Reasons.Add(_DBcontext.RiskGroups.Find(4));
-                _DBcontext.Students.Add(newsStudent);
-            }
-            // if (newsStudent.IsExpelled)
-            // newsStudent.Note+=" Отчислен";
+            if(newsStudent.Student.RoomId!=0)
+                newsStudent.Student.Reasons.Add(_DBcontext.RiskGroups.Find(4));
 
-            // if (newsStudent.IsAcadem)
-            // newsStudent.Note+=" В академическом отпуске";
+            if (newsStudent.IsExpelled)
+                newsStudent.Student.Note+=" Отчислен";
+
+            if (newsStudent.IsInAcadem)
+                newsStudent.Student.Note+=" В академическом отпуске";
+
+            if (newsStudent.Student.Id !=0)
+                _DBcontext.Students.Update(newsStudent.Student);
+            else
+                _DBcontext.Students.Add(newsStudent.Student);
+
             _DBcontext.SaveChanges();
             return RedirectToAction("StudentList");
         }
@@ -84,7 +86,7 @@ namespace journalapp.Controllers
         {
             List<Position> positions=_DBcontext.Positions.ToList();
             List<PositionsViewModel> positionsViewModels = new List<PositionsViewModel>();
-            List<Student> students=_DBcontext.Students.ToList();
+            List<Student> students=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).ToList();
             foreach(var obj in positions)
             {
                 PositionsViewModel posVM= new PositionsViewModel{
@@ -106,7 +108,7 @@ namespace journalapp.Controllers
         public IActionResult AddStudentOnPosition(int Id)
         {
              Position selectedPosition=_DBcontext.Positions.Find(Id);
-            List<Student> studentsWithoutPosition=_DBcontext.Students.ToList();
+            List<Student> studentsWithoutPosition=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).ToList();
                 PositionsViewModel posVM= new PositionsViewModel{
             Position=selectedPosition,
             StudentsSelectList=studentsWithoutPosition.Select(i => new SelectListItem{
@@ -134,7 +136,7 @@ namespace journalapp.Controllers
         }
 
         public IActionResult StudHealthGroups(){
-        IEnumerable<Student> studentsList=_DBcontext.Students.Include(i=>i.HealthGroup);
+        IEnumerable<Student> studentsList=_DBcontext.Students.Include(i=>i.HealthGroup).Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).AsNoTracking();
             return View(studentsList);
         }
 
@@ -160,7 +162,7 @@ namespace journalapp.Controllers
         }
 
         public IActionResult StudOfRiskGroup(){
-        IEnumerable<Student> studentsList=_DBcontext.Students.Where(i=>i.Reasons.Count!=0)
+        IEnumerable<Student> studentsList=_DBcontext.Students.Where(i=>i.Reasons.Count!=0 && i.Expelleds.Count==0 && i.InAcadems.Count==0)
                                             .Include(i=>i.Reasons);
             return View(studentsList);
         }

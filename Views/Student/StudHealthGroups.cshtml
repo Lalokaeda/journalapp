@@ -2,77 +2,79 @@
 @{
     ViewData["Title"] = "Лист здоровья";
 }
-
 <div class="card win">
-<h1> @ViewData["Title"]</h1>
- <div class="card-body">
-    <table class="table table-hover table-bordered"><thead>
-    <tr>
-        <th>Студент</th>
-        <th>Группа здоровья</th>
-        <th>Рекомендации</th>
-        <th></th>
-    </tr>
-</thead>
-<tbody>
-   @foreach (var student in Model)
-   {
-    @if(student.Expelleds.Count()>0)
-    {
-    <tr>
-            <td>@student.GetShortName()</td>
-        @if(student.HealthGroup!=null)
-         {
-        <td>@student.HealthGroup.Name</td>
-            @if(student.HealthGroup.Recommendation!=null){
-                <td>@student.HealthGroup.Recommendation</td>
+    <h1> @ViewData["Title"]</h1>
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Студент</th>
+                    <th>Группа здоровья</th>
+                    <th>Рекомендации</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var student in Model)
+            {
+                @if(student.Expelleds.Count()==0)
+                {
+                    <tr>
+                        <td>@student.GetShortName()</td>
+                    @if(student.HealthGroup!=null)
+                    {
+                        <td>@student.HealthGroup.Name</td>
+                        @if(student.HealthGroup.Recommendation!=null)
+                        {
+                            <td>@student.HealthGroup.Recommendation</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        } 
+                    }
+                    else 
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="EditHealthGroup">Редактировать</a>
+                            </div>
+                        </td>
+                    </tr>
                 }
-            else{
-                <td></td>
-                } 
-        }
-        else 
-        {
-            <td></td>
-            <td></td>
-        }
-
-        <td class="text-center">
-            <div class="btn-group">
-    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="EditHealthGroup">Редактировать</a>
-    </div>
-        </td>
-    </tr>
+                else
+                {
+                    <tr class="text-danger">
+                        <td>@student.GetShortName()</td>
+                    @if(student.HealthGroup!=null)
+                    {
+                        <td>@student.HealthGroup.Name</td>
+                        @if(student.HealthGroup.Recommendation!=null)
+                        {
+                            <td>@student.HealthGroup.Recommendation</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        } 
+                    }
+                    else 
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="EditHealthGroup">Редактировать</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
             }
-    else{
-        <tr class="text-danger">
-          <td>@student.GetShortName()</td>
-        @if(student.HealthGroup!=null)
-         {
-        <td>@student.HealthGroup.Name</td>
-            @if(student.HealthGroup.Recommendation!=null){
-                <td>@student.HealthGroup.Recommendation</td>
-                }
-            else{
-                <td></td>
-                } 
-        }
-        else 
-        {
-            <td></td>
-            <td></td>
-        }
-
-        <td class="text-center">
-            <div class="btn-group">
-    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="EditHealthGroup">Редактировать</a>
+            </tbody>
+        </table>
     </div>
-        </td>
-    </tr>
-    }
-   }
-
-</tbody>
-</table>
-</div>
 </div>

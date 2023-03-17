@@ -21,16 +21,19 @@ namespace journalapp.Controllers
             _DBcontext = context;
         }
 
-        //   public IActionResult StudOfEventList()
-        // {
-        //     List<StudentsOfEvent> studOfEventList=_DBcontext.StudentsOfEvents.Include(i=>i.Student).Include(i=>i.Event).OrderBy(i=>i.Student.IsExpelled).ThenBy(i=>i.Student.Surname).ToList();
-        //     return View(studOfEventList);
-        // }
+          public IActionResult StudOfEventList()
+        {
+            List<StudentsOfEvent> studOfEventList=_DBcontext.StudentsOfEvents.Where(i=>i.Student.Expelleds.Count==0&&i.Student.InAcadems.Count==0)
+                                                                            .Include(i=>i.Student).Include(i=>i.Event)
+                                                                            .OrderBy(i=>i.Student.Surname).ToList();
+            return View(studOfEventList);
+        }
 
         public IActionResult AddEdit(int? Id)
         {   
             StudentsOfEventViewModel currentStudOfEvent=new StudentsOfEventViewModel{
-                StudentsList=_DBcontext.Students.Select(i=> new SelectListItem{
+                StudentsList=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0)
+                                                .Select(i=> new SelectListItem{
                     Text=i.GetShortName(),
                     Value=i.Id.ToString()
                 }).ToList(),

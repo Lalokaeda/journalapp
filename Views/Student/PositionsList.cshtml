@@ -5,33 +5,35 @@
 }
 
 <div class="card win">
-<h1> @ViewData["Title"]</h1>
- <div class="card-body">
-    <table class="table table-hover table-bordered"><thead>
-    <tr>
-        <th>Должность</th>
-        <th>Студент</th>
-        <th></th>
-    </tr>
-</thead>
-<tbody>
-   @foreach (var pos in Model)
-   {
-    <tr>
-        <td>@pos.Position.Name</td>
-        @if(pos.CurStudent!=null){
-              <td>@pos.CurStudent.GetFullName()</td>
-        }
-        else{
-            <td></td>
-        }
-        <td class="text-center">
-    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@pos.Position.Id" asp-action="AddStudentOnPosition">Редактировать</a>
-        </td>
-    </tr>
-   }
-
-</tbody>
-</table>
-</div>
+    <h1> @ViewData["Title"]</h1>
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Должность</th>
+                    <th>Студент</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pos in Model)
+                {
+                    <tr>
+                        <td>@pos.Position.Name</td>
+                        @if(pos.CurStudent!=null)
+                        {
+                            <td>@pos.CurStudent.GetFullName()</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td class="text-center">
+                            <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@pos.Position.Id" asp-action="AddStudentOnPosition">Редактировать</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
