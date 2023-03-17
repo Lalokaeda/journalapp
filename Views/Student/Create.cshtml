@@ -6,6 +6,7 @@
     ViewData["Title"] = "Редактирование студента";
 }
 <form method="post" asp-action="Create">
+  <input asp-for="Student.Id" hidden/>
   <input asp-for="Student.HealthGroupId" hidden/>
     <input asp-for="Student.PositionId" hidden/>
 <div class="card win">
