@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace journalapp.Areas.Identity.Pages.Account
 {
@@ -31,6 +32,8 @@ namespace journalapp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        public IEnumerable<SelectListItem> RolesDropDown;
+        
 
         public RegisterModel(
             UserManager<Emp> userManager,
@@ -47,6 +50,11 @@ namespace journalapp.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+
+            RolesDropDown=_roleManager.Roles.Select(i => new SelectListItem{
+                Text=i.Name,
+                Value=i.Name
+            });
         }
 
         /// <summary>
@@ -98,6 +106,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            
             [DataType(DataType.Password)]
             [Display(Name = "Подтверждение пароля")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -107,14 +116,19 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+             [Required]
             [Display(Name = "Имя")]
             public string Name { get; set; }
-
+             [Required]
             [Display(Name = "Фамилия")]
             public string Surname { get; set; }
-
+            
             [Display(Name = "Отчество")]
-            public string? Patronymic { get; set; }
+            public string Patronymic { get; set; }
+            
+             [Required]
+            [Display(Name = "Должность")]
+            public string Role  {get; set;}
         }
 
 
@@ -125,6 +139,13 @@ namespace journalapp.Areas.Identity.Pages.Account
                 await _roleManager.CreateAsync(new IdentityRole(WC.AdminRole));
                 await _roleManager.CreateAsync(new IdentityRole(WC.PrepodRole));
             }
+
+             if(!await _roleManager.RoleExistsAsync(WC.ZavOtdRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(WC.ZavOtdRole));
+            }
+
+           
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -147,8 +168,9 @@ namespace journalapp.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, WC.PrepodRole);
+                    await _userManager.AddToRoleAsync(user, Input.Role);
                     _logger.LogInformation("User created a new account with password.");
+                    returnUrl= Url.Content("~/");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -161,20 +183,20 @@ namespace journalapp.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+            //         if (_userManager.Options.SignIn.RequireConfirmedAccount)
+            //         {
+            //             return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+            //         }
+            //         else
+            //         {
+            //             await _signInManager.SignInAsync(user, isPersistent: false);
+            //             return LocalRedirect(returnUrl);
+            //         }
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+            //     foreach (var error in result.Errors)
+            //     {
+            //         ModelState.AddModelError(string.Empty, error.Description);
+            //     }
             }
 
             // If we got this far, something failed, redisplay form

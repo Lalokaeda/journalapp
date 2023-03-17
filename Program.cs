@@ -105,7 +105,7 @@ builder.Services.AddRazorPages();
             pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
-// app.MapRazorPages();
+      //  app.MapRazorPages();
         app.Run();
     }
 }

@@ -41,7 +41,14 @@
                 <input asp-for="Input.Patronymic" class="form-control" />
                 <label asp-for="Input.Patronymic">Отчество</label>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <div class="form-floating mb-3">
+  <select class="custom-select" asp-for="Input.Role" asp-items="@Model.RolesDropDown">
+    <option disabled selected>Выберите должность</option>
+  </select>
+</div>
+<span asp-validation-for="Input.Role" class="text-danger"></span>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Зарегистрировать</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">

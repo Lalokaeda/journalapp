@@ -25,13 +25,16 @@ namespace journalapp.Controllers
         public IActionResult StudentList()
         {
             List<StudentViewModel> studentsVMList = new List<StudentViewModel>();
-            List<Student> studentsList = _DBcontext.Students.ToList();
+            List<Student> studentsList = _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).AsNoTracking().ToList();
             foreach (var student in studentsList){
                 StudentViewModel studentVM = new StudentViewModel{
                     Student=student
+                    
                 };
+                studentsVMList.Add(studentVM);
             }
-            return View(studentsVMList.OrderBy(i=>i.IsExpelled).ThenBy(i=>i.Student.Surname));
+            studentsVMList=studentsVMList.OrderBy(i=>i.IsExpelled).ThenBy(i=>i.Student.Surname).ToList();
+            return View(studentsVMList);
         }
 
         public IActionResult Create(int? Id)
@@ -50,8 +53,10 @@ namespace journalapp.Controllers
             if (Id==0)
             return View();
             else {
-                Student currentStudent=_DBcontext.Students.Where(i=>i.Id==Id).FirstOrDefault();
-                return View(currentStudent);
+                StudentViewModel currentStudentVM = new StudentViewModel{
+                    Student=_DBcontext.Students.Find(Id)
+                };
+                return View(currentStudentVM);
             }
         }
 

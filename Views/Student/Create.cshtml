@@ -1,4 +1,4 @@
-@model Student
+@model journalapp.ViewModels.StudentViewModel
 @{
   if(Model==null)
     ViewData["Title"] = "Добавление студента";
@@ -6,8 +6,8 @@
     ViewData["Title"] = "Редактирование студента";
 }
 <form method="post" asp-action="Create">
-  <input asp-for="HealthGroupId" hidden/>
-    <input asp-for="PositionId" hidden/>
+  <input asp-for="Student.HealthGroupId" hidden/>
+    <input asp-for="Student.PositionId" hidden/>
 <div class="card win">
 
 <h1> @ViewData["Title"]</h1>
@@ -16,94 +16,94 @@
 
     <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text " asp-for="GroupId"></label>
+    <label class="input-group-text " asp-for="Student.GroupId"></label>
   </div>
-  <select class="custom-select" asp-for="GroupId" asp-items="@ViewBag.GroupsDropDown">
+  <select class="custom-select" asp-for="Student.GroupId" asp-items="@ViewBag.GroupsDropDown">
     <option disabled selected></option>
   </select>
 </div>
-<span asp-validation-for="GroupId" class="text-danger"></span>
+<span asp-validation-for="Student.GroupId" class="text-danger"></span>
 
     <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Surname"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Surname"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Surname">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Surname">
 </div>
-   <span asp-validation-for="Surname" class="text-danger"></span>
+   <span asp-validation-for="Student.Surname" class="text-danger"></span>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Name"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Name"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Name">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Name">
 </div>
-   <span asp-validation-for="Name" class="text-danger"></span>
+   <span asp-validation-for="Student.Name" class="text-danger"></span>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Patronymic"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Patronymic"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Patronymic">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Patronymic">
 </div>
    
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text " asp-for="Sex"></label>
+    <label class="input-group-text " asp-for="Student.Sex"></label>
   </div>
-  <select class="custom-select" asp-for="Sex">
+  <select class="custom-select" asp-for="Student.Sex">
     <option disabled selected></option>
     <option value="М">М</option>
     <option value="Ж">Ж</option>
   </select>
 </div>
-<span asp-validation-for="Sex" class="text-danger"></span>
+<span asp-validation-for="Student.Sex" class="text-danger"></span>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Address"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Address"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Address">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Address">
 </div>
-<span asp-validation-for="Address" class="text-danger"></span>
+<span asp-validation-for="Student.Address" class="text-danger"></span>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="PhoneNum"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.PhoneNum"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="PhoneNum" id="Phone">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.PhoneNum" id="Phone">
 </div>
-<span asp-validation-for="PhoneNum" class="text-danger"></span>
+<span asp-validation-for="Student.PhoneNum" class="text-danger"></span>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Email"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Email"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Email" asp->
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Email" asp->
 </div>
 
   <div class="input-group mb-3">
   <div class="input-group-prepend">
     <div class="input-group-text">
-      <input type="checkbox" aria-label="Checkbox for following text input" asp-for="IsCommerce">
+      <input type="checkbox" aria-label="Checkbox for following text input" asp-for="Student.IsCommerce">
     </div>
   </div>
-  <label asp-for="IsCommerce"></label>
+  <label asp-for="Student.IsCommerce"></label>
 </div>
 
   <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text form-controlRed" asp-for="Note"></label>
+    <label class="input-group-text form-controlRed" asp-for="Student.Note"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Note">
+  <input type="text" class="form-control form-controlRed" asp-for="Student.Note">
 </div>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <label class="input-group-text " asp-for="RoomId"></label>
+    <label class="input-group-text " asp-for="Student.RoomId"></label>
   </div>
-  <select class="custom-select" asp-for="RoomId" asp-items="@ViewBag.RoomsDropDown">
+  <select class="custom-select" asp-for="Student.RoomId" asp-items="@ViewBag.RoomsDropDown">
     <option selected></option>
   </select>
 </div>
