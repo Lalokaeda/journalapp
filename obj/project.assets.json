@@ -59,6 +59,15 @@
           }
         }
       },
+      "jQuery/1.9.0": {
+        "type": "package"
+      },
+      "jQuery.MaskedInput/1.4.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.9.0"
+        }
+      },
       "Microsoft.AspNetCore.Cryptography.Internal/7.0.3": {
         "type": "package",
         "compile": {
@@ -4030,6 +4039,39 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "jQuery/1.9.0": {
+      "sha512": "bS6OGSd/QL39vKKhATpeehgZDCzV6foRJ52EocEGAB29VetwXkQHN6KQIBlBbW9VJzuHr+rQxHYZ13MnPGQ/vw==",
+      "type": "package",
+      "path": "jquery/1.9.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Scripts/jquery-1.9.0-vsdoc.js",
+        "Content/Scripts/jquery-1.9.0.js",
+        "Content/Scripts/jquery-1.9.0.min.js",
+        "Content/Scripts/jquery-1.9.0.min.map",
+        "Tools/common.ps1",
+        "Tools/install.ps1",
+        "Tools/jquery-1.9.0.intellisense.js",
+        "Tools/uninstall.ps1",
+        "jquery.1.9.0.nupkg.sha512",
+        "jquery.nuspec"
+      ]
+    },
+    "jQuery.MaskedInput/1.4.1": {
+      "sha512": "U/XBjJtENm8HhAm5PjOxlaH+q13PpTJpvDJOPg1bTU0uMssn8pXalqgIqYyg9dvytfodAPneOSwXBG+FxetELA==",
+      "type": "package",
+      "path": "jquery.maskedinput/1.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/scripts/jquery.maskedinput.js",
+        "content/scripts/jquery.maskedinput.min.js",
+        "jquery.maskedinput.1.4.1.nupkg.sha512",
+        "jquery.maskedinput.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Cryptography.Internal/7.0.3": {
@@ -11296,7 +11338,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.3",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.3",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.4"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.4",
+      "jQuery.MaskedInput >= 1.4.1"
     ]
   },
   "packageFolders": {
@@ -11375,6 +11418,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[7.0.4, )"
+          },
+          "jQuery.MaskedInput": {
+            "target": "Package",
+            "version": "[1.4.1, )"
           }
         },
         "imports": [

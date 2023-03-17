@@ -1,0 +1,45 @@
+@model Student
+@{
+    ViewData["Title"] = "Редактирование группы здоровья";
+}
+<form method="post" asp-action="EditHealthGroup">
+  <input asp-for="GroupId" hidden/>
+  <input asp-for="Surname" hidden/>
+  <input asp-for="Name" hidden/>
+  <input asp-for="Patronymic" hidden/>
+  <input asp-for="Sex" hidden/>
+  <input asp-for="Address" hidden/>
+  <input asp-for="PhoneNum" hidden/>
+  <input asp-for="Email" hidden/>
+  <input asp-for="IsCommerce" hidden/>
+  <input asp-for="Note" hidden/>
+    <input asp-for="PositionId" hidden/>
+    <input asp-for="RoomId" hidden/>
+<div class="card win">
+
+<h1> @ViewData["Title"]</h1>
+
+ <div class="card-body">
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text ">@Model.GetShortName()</label>
+  </div>
+  <select class="custom-select" asp-for="HealthGroupId" asp-items="@ViewBag.HealthGroupsDropDown">
+    <option disabled selected>Выберите группу здоровья</option>
+  </select>
+</div>
+<span asp-validation-for="HealthGroupId" class="text-danger"></span>
+
+
+<div class="text-right btn-right">
+<a class="btn btn-primary" asp-action="StudHealthGroups">Отмена</a>
+<input type="submit" class="btn btn-primary" asp-area="" asp-controller="Student" asp-action="EditHealthGroup" value="Сохранить">
+</div>
+
+</div>
+</div>
+</form>
+
+@section Scripts{
+  @{<partial name ="_ValidationScriptsPartial"/>}
+}

@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "95o4LK2bOI1mLPp2yrumJzpQ+i0DM215PBMPqc8VbWrqm9HBoNNkY1gpFlZNOLfD93IoHHEdzv7wW65P099F1A==",
+  "dgSpecHash": "sGEwRHh/SdGS39D7xZXsU8iKdu+FlQczys/xlljE1NpbZom9lHC7F/wrMBBfWLVtlnqdnoIqnXtjHYhROn7WZQ==",
   "success": true,
-  "projectFilePath": "D:\\journalapp\\journalapp.csproj",
+  "projectFilePath": "d:\\journalapp\\journalapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Acer\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Acer\\.nuget\\packages\\jquery\\1.9.0\\jquery.1.9.0.nupkg.sha512",
+    "C:\\Users\\Acer\\.nuget\\packages\\jquery.maskedinput\\1.4.1\\jquery.maskedinput.1.4.1.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.3\\microsoft.aspnetcore.cryptography.internal.7.0.3.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.3\\microsoft.aspnetcore.cryptography.keyderivation.7.0.3.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\microsoft.aspnetcore.hosting.abstractions\\2.2.0\\microsoft.aspnetcore.hosting.abstractions.2.2.0.nupkg.sha512",

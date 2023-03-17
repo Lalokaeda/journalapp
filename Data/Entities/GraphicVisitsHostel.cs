@@ -9,9 +9,10 @@ public partial class GraphicVisitsHostel
 
     public int StudentId { get; set; }
 
+    public int Semestr {get; set;}
     public DateTime VisitDate { get; set; }
 
-    public string GoalOfVisil { get; set; } = null!;
+    public string GoalOfVisit { get; set; } = null!;
 
     public string Result { get; set; } = null!;
 

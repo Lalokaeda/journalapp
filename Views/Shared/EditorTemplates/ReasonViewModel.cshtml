@@ -1,0 +1,16 @@
+@model journalapp.ViewModels.ReasonViewModel
+@* @Html.CheckBoxFor(x => x.Selected)
+@Html.LabelFor(x => x.Selected, Model.Reason.Reason) *@
+
+<input asp-for="Reason.Id" hidden/>
+<input asp-for="Reason.Reason" hidden/>
+<input asp-for="Reason.Students" hidden/>
+  <div class="input-group mb-3" style="margin: 10px">
+  <div class="input-group-prepend">
+    <div class="input-group-text">
+      <input type="checkbox" aria-label="Checkbox for following text input" asp-for="Selected">
+    </div>
+  </div>
+  <label>@Model.Reason.Reason</label>
+</div>
+<br />

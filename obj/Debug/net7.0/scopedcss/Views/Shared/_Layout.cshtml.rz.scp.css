@@ -139,13 +139,7 @@ img.img-fluid[b-3tspz0la4m]{
  margin-bottom: 10px;
 }
 
-.menu-list ul li a[b-3tspz0la4m] {
-  font-family: 'Arial', monospace;;
-  font-weight: normal;
-  color: black;
-  text-decoration: none;
-  display: block;
-}
+
 
 .content[b-3tspz0la4m] {
   transition: 0.5s;
@@ -165,5 +159,20 @@ img.img-fluid[b-3tspz0la4m]{
 }
 .menu-list ul li :hover[b-3tspz0la4m]{
   margin-bottom: 15px;
-  background: #e7e8f2;
+  color: #1b6ec2;
  }
+ .menu-list ul li a[b-3tspz0la4m] {
+  font-family: 'Arial', monospace;
+  font-weight: normal;
+  color: black;
+  text-decoration: none;
+  display: block;
+
+}
+#test[b-3tspz0la4m]{
+  color: red;
+}
+
+a:hover[b-3tspz0la4m]{
+  color: #1b6ec2;
+}

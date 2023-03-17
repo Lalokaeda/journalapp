@@ -7,6 +7,8 @@ public partial class StudentsOnPedControl
 {
     public int Id { get; set; }
 
+    public int Semestr { get; set; }
+
     public int StudentId { get; set; }
 
     public int Tocid { get; set; }

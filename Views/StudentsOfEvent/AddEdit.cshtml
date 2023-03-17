@@ -1,0 +1,60 @@
+@model journalapp.ViewModels.StudentsOfEventViewModel
+@{
+  if(Model.StudentsOfEvent==null)
+    ViewData["Title"] = "Добавление сведений";
+  else
+    ViewData["Title"] = "Редактирование сведений";
+}
+<form method="post" asp-action="AddEdit">
+<input asp-for="StudentsOfEvent.Id" hidden/>
+<div class="card win">
+
+<h1> @ViewData["Title"]</h1>
+
+ <div class="card-body">
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text form-controlRed" asp-for="StudentsOfEvent.DatenTime"></label>
+  </div>
+            <input id="datetime" type="datetime-local" class="form-controlRed" asp-for="StudentsOfEvent.DatenTime" />
+            </div>  
+            <span asp-validation-for="StudentsOfEvent.DatenTime" class="text-danger"></span>
+
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="StudentsOfEvent.StudentId"></label>
+  </div>
+  <select class="custom-select" asp-for="StudentsOfEvent.StudentId" asp-items="@Model.StudentsList">
+    <option disabled selected></option>
+  </select>
+</div>
+<span asp-validation-for="StudentsOfEvent.StudentId" class="text-danger"></span>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="StudentsOfEvent.EventId"></label>
+  </div>
+  <select class="custom-select" asp-for="StudentsOfEvent.EventId" asp-items="@Model.EventsList">
+    <option selected></option>
+  </select>
+</div>
+
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text form-controlRed" asp-for="StudentsOfEvent.Result"></label>
+  </div>
+  <input type="text" class="form-control form-controlRed" asp-for="StudentsOfEvent.Result">
+</div>  
+
+<div class="text-right btn-right">
+<a class="btn btn-primary" asp-action="StudOfEventList">Отмена</a>
+<input type="submit" class="btn btn-primary" asp-area="" asp-controller="StudentsOfEvent" asp-action="AddEdit" value="Сохранить">
+</div>
+
+</div>
+</div>
+</form>
+
+@section Scripts{
+  @{<partial name ="_ValidationScriptsPartial"/>}
+}

@@ -7,9 +7,9 @@ public partial class Curator
 {
     public int Id { get; set; }
 
-    public int? StudentId { get; set; }
+    public int StudentId { get; set; }
 
-    public string? ChildGroupId { get; set; }
+    public string ChildGroupId { get; set; }=null!;
 
     public virtual Group? ChildGroup { get; set; }
 

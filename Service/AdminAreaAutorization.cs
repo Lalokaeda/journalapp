@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 namespace journalapp.Service
 {
     public class AdminAreaAutorization : IControllerModelConvention
-    { private readonly string area;
+    { 
+    private readonly string area;
     private readonly string policy;
 
     public AdminAreaAutorization(string area, string policy){

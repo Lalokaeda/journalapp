@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace journalapp;
 
 public partial class Passport
 {
     public int Id { get; set; }
+
+    public int Semestr { get; set; }
+    
+    public string GroupId { get; set; } = null!;
 
     public int? CountStudMen { get; set; }
 
@@ -25,7 +30,15 @@ public partial class Passport
 
     public int? CountOvzstud { get; set; }
 
-    public int? CountHostelVisits { get; set; }
+     private int? _countHostelVisits;
+    public int? CountHostelVisits { 
+        get{
+            return _countHostelVisits;
+        }
+    set
+    {
+   _countHostelVisits = Group.Students.Where(i=>i.GraphicVisitsHostels.Count!=0).Sum(i=>i.GraphicVisitsHostels.Where(p=>p.Semestr==Semestr).Count());
+    } }
 
     public int? CountCommunHours { get; set; }
 
@@ -33,9 +46,8 @@ public partial class Passport
 
     public int? CountStudInEvents { get; set; }
 
-    public string GroupId { get; set; } = null!;
-
     public DateTime Date { get; set; }
 
     public virtual Group Group { get; set; } = null!;
+
 }

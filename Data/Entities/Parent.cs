@@ -19,5 +19,5 @@ public partial class Parent
 
     public virtual ICollection<WorkWithParent> WorkWithParents { get; } = new List<WorkWithParent>();
 
-    public virtual ICollection<Student> Srudents { get; } = new List<Student>();
+    public virtual ICollection<Student> Students { get; } = new List<Student>();
 }

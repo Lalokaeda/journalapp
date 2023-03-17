@@ -9,5 +9,5 @@ public partial class RiskGroup
 
     public string Reason { get; set; } = null!;
 
-    public virtual ICollection<Student> Students { get; } = new List<Student>();
+    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 }

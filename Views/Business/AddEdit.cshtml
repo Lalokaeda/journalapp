@@ -1,0 +1,52 @@
+@model journalapp.ViewModels.BusinessViewModel
+@{
+  if(Model.Business==null)
+    ViewData["Title"] = "Добавление сведений";
+  else
+    ViewData["Title"] = "Редактирование сведений";
+}
+<form method="post" asp-action="AddEdit">
+<div class="card win">
+
+<h1> @ViewData["Title"]</h1>
+
+ <div class="card-body">
+
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="Business.StudentId"></label>
+  </div>
+  <select class="custom-select" asp-for="Business.StudentId" asp-items="@Model.StudentsList">
+    <option disabled selected></option>
+  </select>
+</div>
+<span asp-validation-for="Business.StudentId" class="text-danger"></span>
+
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text form-controlRed" asp-for="Business.Workshop"></label>
+  </div>
+  <input type="text" class="form-control form-controlRed" asp-for="Business.Workshop">
+</div>  
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="Business.StudentAssotiationId"></label>
+  </div>
+  <select class="custom-select" asp-for="Business.StudentAssotiationId" asp-items="@Model.AssotiationsList">
+    <option selected></option>
+  </select>
+</div>
+
+<div class="text-right btn-right">
+<a class="btn btn-primary" asp-action="BusinessList">Отмена</a>
+<input type="submit" class="btn btn-primary" asp-area="" asp-controller="Business" asp-action="AddEdit" value="Сохранить">
+</div>
+
+</div>
+</div>
+</form>
+
+@section Scripts{
+  @{<partial name ="_ValidationScriptsPartial"/>}
+}

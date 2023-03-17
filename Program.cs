@@ -19,8 +19,10 @@ public class Program
 
         var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'JournalContextConnection' not found.");
 
-        builder.Services.AddDbContext<JournalContext>(options => 
-        options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<JournalContext>(options =>{
+            options.UseSqlServer(connectionString);
+            options.EnableSensitiveDataLogging();
+        });
 
 
         builder.Services.AddHttpContextAccessor();
@@ -64,10 +66,10 @@ builder.Services.AddRazorPages();
             // });
 
             //настраиваем политику авторизации для Admin area
-            // builder.Services.AddAuthorization(x =>
-            // {
-            //     x.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); });
-            // });
+            builder.Services.AddAuthorization(x =>
+            {
+                x.AddPolicy("AdminArea", policy => { policy.RequireRole(WC.AdminRole); });
+            });
 
         var app = builder.Build();
 
@@ -96,11 +98,11 @@ builder.Services.AddRazorPages();
 {
         endpoints.MapRazorPages();
         endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-        endpoints.MapControllerRoute(
             name:"admin", 
             pattern:"{area:exists}/{controller=Home}/{action=Index}/{id?}");
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
 // app.MapRazorPages();

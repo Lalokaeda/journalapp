@@ -160,12 +160,12 @@ namespace journalapp.Migrations
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SrudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.HasKey("ParentId", "SrudentId");
+                    b.HasKey("ParentId", "StudentId");
 
-                    b.HasIndex("SrudentId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("ParentOfStud", (string)null);
                 });
@@ -207,9 +207,6 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("date");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StudentAssotiationId");
@@ -241,6 +238,9 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
+
                     b.Property<int?>("StudCount")
                         .HasColumnType("int");
 
@@ -257,24 +257,6 @@ namespace journalapp.Migrations
                     b.ToTable("CommunicationHours");
                 });
 
-            modelBuilder.Entity("journalapp.CourseOfGroup", b =>
-                {
-                    b.Property<string>("GroupId")
-                        .HasMaxLength(15)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<int>("Course")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("date");
-
-                    b.HasKey("GroupId", "Course");
-
-                    b.ToTable("CourseOfGroup", (string)null);
-                });
-
             modelBuilder.Entity("journalapp.Curator", b =>
                 {
                     b.Property<int>("Id")
@@ -284,11 +266,12 @@ namespace journalapp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChildGroupId")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
 
-                    b.Property<int?>("StudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -298,6 +281,175 @@ namespace journalapp.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Curators");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.Expelled", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Expelleds");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.InAcadem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("InAcadems");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.IndividualAchiv", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Achievement")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int>("LOBId")
+                        .HasColumnType("int")
+                        .HasColumnName("LOBId");
+
+                    b.Property<int>("Semester")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LOBId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("IndividualAchivs");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.InteractionForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InteractionForms");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.InteractionWithTeachers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("EmpId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("FormId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<int>("InteractionFormId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Questions")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("InteractionFormId");
+
+                    b.ToTable("InteractionsWithTeachers");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.RemarksForLogging", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<bool>("IsFixed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("RemarksForLoggings");
                 });
 
             modelBuilder.Entity("journalapp.Division", b =>
@@ -327,9 +479,9 @@ namespace journalapp.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
-                    b.Property<string>("EmpId")
+                    b.Property<string>("GroupId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(15)");
 
                     b.Property<int>("Lobid")
                         .HasColumnType("int")
@@ -341,9 +493,12 @@ namespace journalapp.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpId");
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("Lobid");
 
@@ -455,7 +610,7 @@ namespace journalapp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("GoalOfVisil")
+                    b.Property<string>("GoalOfVisit")
                         .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(false)
@@ -466,6 +621,9 @@ namespace journalapp.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -533,7 +691,10 @@ namespace journalapp.Migrations
             modelBuilder.Entity("journalapp.Hostel", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -618,6 +779,7 @@ namespace journalapp.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("GroupId")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
@@ -629,6 +791,9 @@ namespace journalapp.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
 
                     b.Property<string>("Theme")
                         .HasMaxLength(200)
@@ -699,6 +864,9 @@ namespace journalapp.Migrations
                         .HasMaxLength(15)
                         .IsUnicode(false)
                         .HasColumnType("varchar(15)");
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -818,12 +986,11 @@ namespace journalapp.Migrations
                         .HasColumnType("varchar(15)");
 
                     b.Property<int?>("HealthGroupId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<bool>("IsCommerce")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsExpelled")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -909,7 +1076,7 @@ namespace journalapp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("DateTime")
+                    b.Property<DateTime?>("DatenTime")
                         .HasColumnType("datetime");
 
                     b.Property<int>("EventId")
@@ -920,6 +1087,9 @@ namespace journalapp.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -949,6 +1119,9 @@ namespace journalapp.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<int>("Semestr")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -1103,7 +1276,7 @@ namespace journalapp.Migrations
 
                     b.HasOne("journalapp.Student", null)
                         .WithMany()
-                        .HasForeignKey("SrudentId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_ParentOfStud_Students");
@@ -1158,28 +1331,20 @@ namespace journalapp.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("journalapp.CourseOfGroup", b =>
-                {
-                    b.HasOne("journalapp.Group", "Group")
-                        .WithMany("CourseOfGroups")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_CourseOfGroup_Groups");
-
-                    b.Navigation("Group");
-                });
-
             modelBuilder.Entity("journalapp.Curator", b =>
                 {
                     b.HasOne("journalapp.Group", "ChildGroup")
                         .WithMany("Curators")
                         .HasForeignKey("ChildGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Curators_Groups");
 
                     b.HasOne("journalapp.Student", "Student")
                         .WithMany("Curators")
                         .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Curators_Students");
 
                     b.Navigation("ChildGroup");
@@ -1187,14 +1352,100 @@ namespace journalapp.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("journalapp.EducativeEvent", b =>
+            modelBuilder.Entity("journalapp.Data.Entities.Expelled", b =>
+                {
+                    b.HasOne("journalapp.Student", "Student")
+                        .WithMany("Expelleds")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Expelled_Students");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.InAcadem", b =>
+                {
+                    b.HasOne("journalapp.Student", "Student")
+                        .WithMany("InAcadems")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_InAcadems_Students");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.IndividualAchiv", b =>
+                {
+                    b.HasOne("journalapp.LineOfBusiness", "LOB")
+                        .WithMany("IndividualAchivs")
+                        .HasForeignKey("LOBId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_IndividualAchivs_LineOfBusiness");
+
+                    b.HasOne("journalapp.Student", "Student")
+                        .WithMany("IndividualAchivs")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_IndividualAchivs_Students");
+
+                    b.Navigation("LOB");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.InteractionWithTeachers", b =>
                 {
                     b.HasOne("journalapp.Emp", "Emp")
-                        .WithMany("EducativeEvents")
+                        .WithMany("InteractionsWithTeachers")
                         .HasForeignKey("EmpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_EducativeEvents_Emps");
+                        .HasConstraintName("FK_InteractionsWithTeachers_Emps");
+
+                    b.HasOne("journalapp.Group", "Group")
+                        .WithMany("InteractionsWithTeachers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_InteractionsWithTeachers_Groups");
+
+                    b.HasOne("journalapp.Data.Entities.InteractionForm", "InteractionForm")
+                        .WithMany("InteractionWithTeachers")
+                        .HasForeignKey("InteractionFormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Emp");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("InteractionForm");
+                });
+
+            modelBuilder.Entity("journalapp.Data.Entities.RemarksForLogging", b =>
+                {
+                    b.HasOne("journalapp.Group", "Group")
+                        .WithMany("RemarksForLoggings")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RemarksForLoggings_Groups");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("journalapp.EducativeEvent", b =>
+                {
+                    b.HasOne("journalapp.Group", "Group")
+                        .WithMany("EducativeEvents")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_EducativeEvents_Semestrs");
 
                     b.HasOne("journalapp.LineOfBusiness", "Lob")
                         .WithMany("EducativeEvents")
@@ -1203,7 +1454,7 @@ namespace journalapp.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_EducativeEvents_LineOfBusiness");
 
-                    b.Navigation("Emp");
+                    b.Navigation("Group");
 
                     b.Navigation("Lob");
                 });
@@ -1247,6 +1498,7 @@ namespace journalapp.Migrations
                         .WithMany("ParentMeetings")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_ParentMeeting_Groups");
 
                     b.Navigation("Group");
@@ -1390,6 +1642,11 @@ namespace journalapp.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("journalapp.Data.Entities.InteractionForm", b =>
+                {
+                    b.Navigation("InteractionWithTeachers");
+                });
+
             modelBuilder.Entity("journalapp.Division", b =>
                 {
                     b.Navigation("Specialities");
@@ -1397,9 +1654,9 @@ namespace journalapp.Migrations
 
             modelBuilder.Entity("journalapp.Emp", b =>
                 {
-                    b.Navigation("EducativeEvents");
-
                     b.Navigation("Groups");
+
+                    b.Navigation("InteractionsWithTeachers");
                 });
 
             modelBuilder.Entity("journalapp.Event", b =>
@@ -1411,13 +1668,17 @@ namespace journalapp.Migrations
                 {
                     b.Navigation("CommunicationHours");
 
-                    b.Navigation("CourseOfGroups");
-
                     b.Navigation("Curators");
+
+                    b.Navigation("EducativeEvents");
+
+                    b.Navigation("InteractionsWithTeachers");
 
                     b.Navigation("ParentMeetings");
 
                     b.Navigation("Passports");
+
+                    b.Navigation("RemarksForLoggings");
 
                     b.Navigation("Students");
                 });
@@ -1435,6 +1696,8 @@ namespace journalapp.Migrations
             modelBuilder.Entity("journalapp.LineOfBusiness", b =>
                 {
                     b.Navigation("EducativeEvents");
+
+                    b.Navigation("IndividualAchivs");
                 });
 
             modelBuilder.Entity("journalapp.Parent", b =>
@@ -1463,7 +1726,13 @@ namespace journalapp.Migrations
 
                     b.Navigation("Curators");
 
+                    b.Navigation("Expelleds");
+
                     b.Navigation("GraphicVisitsHostels");
+
+                    b.Navigation("InAcadems");
+
+                    b.Navigation("IndividualAchivs");
 
                     b.Navigation("StudentsOfEvents");
 

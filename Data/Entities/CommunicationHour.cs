@@ -7,6 +7,8 @@ public partial class CommunicationHour
 {
     public int Id { get; set; }
 
+    public int Semestr { get; set; }
+
     public DateTime Date { get; set; }
 
     public string Theme { get; set; } = null!;

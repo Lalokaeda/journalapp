@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using journalapp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NuGet.Packaging;
 
 namespace journalapp.Controllers
 {
@@ -20,11 +22,11 @@ namespace journalapp.Controllers
         }
 
 
-        public IActionResult StudentList()
-        {
-            List<Student> studentsList=_DBcontext.Students.ToList();
-            return View(studentsList);
-        }
+        // public IActionResult StudentList()
+        // {
+        //     List<Student> studentsList=_DBcontext.Students.OrderBy(i=>i.IsExpelled).ThenBy(i=>i.Surname).ToList();
+        //     return View(studentsList);
+        // }
 
         public IActionResult Create(int? Id)
         { 
@@ -53,8 +55,16 @@ namespace journalapp.Controllers
         {
             if (newsStudent.Id !=0)
             _DBcontext.Students.Update(newsStudent);
-            else
-            _DBcontext.Students.Add(newsStudent);
+            else{
+                if(newsStudent.RoomId!=0)
+                newsStudent.Reasons.Add(_DBcontext.RiskGroups.Find(4));
+                _DBcontext.Students.Add(newsStudent);
+            }
+            // if (newsStudent.IsExpelled)
+            // newsStudent.Note+=" Отчислен";
+
+            // if (newsStudent.IsAcadem)
+            // newsStudent.Note+=" В академическом отпуске";
             _DBcontext.SaveChanges();
             return RedirectToAction("StudentList");
         }
@@ -67,59 +77,136 @@ namespace journalapp.Controllers
             foreach(var obj in positions)
             {
                 PositionsViewModel posVM= new PositionsViewModel{
-            Position=obj,
-            CurStudent=students.Where(i=> i.Position==obj).FirstOrDefault(),
-            StudentsSelectList=students.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
-                Text= i.Surname+" "+i.Name+" " + i.Patronymic,
-                Value=i.Id.ToString()
-                }).ToList()
+            Position=obj
+            // StudentsSelectList=students.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
+            //     Text= i.GetFullName(),
+            //     Value=i.Id.ToString()
+            //     }).ToList()
             };
-             try
-                {
-                  posVM.StudentsSelectList.AddRange(students.Where(i=>i.Patronymic==null).Select(i => new SelectListItem{
-                Text= i.Surname+" "+i.Name,
-                Value=i.Id.ToString()
-                }).ToList());
-                }
-                catch (System.Exception)
-                {
-                    
-                    throw;
-                }
+            try{
+                 posVM.CurStudent=students.Where(i=> i.Position==obj).FirstOrDefault();
+            } 
+            catch{}
             positionsViewModels.Add(posVM);
             }
             return View(positionsViewModels);
         }
 
-        public IActionResult AddStudentOnPosition()
+        public IActionResult AddStudentOnPosition(int Id)
         {
-             List<Position> positions=_DBcontext.Positions.ToList();
-            List<PositionsViewModel> positionsViewModels = new List<PositionsViewModel>();
-            List<Student> studentsWithoutPosition=_DBcontext.Students.Where(i=>i.PositionId==0).ToList();
-            foreach(var obj in positions)
-            {
+             Position selectedPosition=_DBcontext.Positions.Find(Id);
+            List<Student> studentsWithoutPosition=_DBcontext.Students.ToList();
                 PositionsViewModel posVM= new PositionsViewModel{
-            Position=obj,
-            StudentsSelectList=studentsWithoutPosition.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
-                Text= i.Surname+" "+i.Name+" " + i.Patronymic,
+            Position=selectedPosition,
+            StudentsSelectList=studentsWithoutPosition.Select(i => new SelectListItem{
+                Text= i.GetFullName(),
                 Value=i.Id.ToString()
                 }).ToList()
             };
-             try
-                {
-                  posVM.StudentsSelectList.AddRange(studentsWithoutPosition.Where(i=>i.Patronymic==null).Select(i => new SelectListItem{
-                Text= i.Surname+" "+i.Name,
-                Value=i.Id.ToString()
-                }).ToList());
-                }
-                catch (System.Exception)
-                {
-                    
-                    throw;
-                }
-            positionsViewModels.Add(posVM);
+            try{
+                posVM.CurStudent=_DBcontext.Students.Where(i=> i.PositionId==Id).Include(i=>i.Position).FirstOrDefault();
             }
-            return View(positionsViewModels);
+            catch{
+            }
+            return View(posVM);
+        }
+
+         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddStudentOnPosition(PositionsViewModel newsStudentPosition)
+        {  
+            Student currentStudent=_DBcontext.Students.Find(newsStudentPosition.CurStudent.Id);
+            currentStudent.PositionId= newsStudentPosition.CurStudent.PositionId;
+            _DBcontext.Students.Update(currentStudent);
+            _DBcontext.SaveChanges();
+            return RedirectToAction("PositionsList");
+        }
+
+        public IActionResult StudHealthGroups(){
+        IEnumerable<Student> studentsList=_DBcontext.Students.Include(i=>i.HealthGroup);
+            return View(studentsList);
+        }
+
+  public IActionResult EditHealthGroup(int Id)
+        { 
+            IEnumerable<SelectListItem> HealthGroupsDropDown=_DBcontext.HealthGroups.Select(i => new SelectListItem{
+                Text=i.Name,
+                Value=i.Id.ToString()
+            });
+
+            ViewBag.HealthGroupsDropDown=HealthGroupsDropDown;
+                Student currentStudent=_DBcontext.Students.Find(Id);
+                return View(currentStudent);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditHealthGroup(Student newsStudentsHealthGroup)
+        {
+            _DBcontext.Students.Update(newsStudentsHealthGroup);
+            _DBcontext.SaveChanges();
+            return RedirectToAction("StudHealthGroups");
+        }
+
+        public IActionResult StudOfRiskGroup(){
+        IEnumerable<Student> studentsList=_DBcontext.Students.Where(i=>i.Reasons.Count!=0)
+                                            .Include(i=>i.Reasons);
+            return View(studentsList);
+        }
+
+         public IActionResult AddEditRiskGroups(int? Id)
+        {
+            List<Student> students=_DBcontext.Students.Include(i=>i.Reasons).ToList();
+            StudentsOfRiskGroupViewModel StudRiskVM;
+            if (Id !=null)
+            {
+                Student selectedStudent=students.Where(i=>i.Id==Id).FirstOrDefault();
+                StudRiskVM= new StudentsOfRiskGroupViewModel{
+                    Student=Id,
+                    StudentsSelectList=students.Select(i => new SelectListItem{
+                        Text= i.GetFullName(),
+                        Value=i.Id.ToString()
+                    }).ToList(),
+                    AllReasons=_DBcontext.RiskGroups.Select(i=> new ReasonViewModel(){
+                        Reason=i,
+                        Selected = selectedStudent.Reasons.Contains(i)? true:false
+                    })};
+                   
+            }
+            else{
+                StudRiskVM= new StudentsOfRiskGroupViewModel{
+                    StudentsSelectList=students.Select(i => new SelectListItem{
+                        Text= i.GetFullName(),
+                        Value=i.Id.ToString()
+                    }).ToList(),
+                    AllReasons=_DBcontext.RiskGroups.Select(i=> new ReasonViewModel{
+                        Reason=i,
+                        Selected=false
+                    })};
+            }
+ return View(StudRiskVM);
+            }
+            
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddEditRiskGroups(StudentsOfRiskGroupViewModel model)
+        {
+            Student currentStudent=_DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student).FirstOrDefault();
+            foreach(var reason in model.AllReasons)
+            {
+               if(reason.Selected && !reason.Reason.Students.Contains(currentStudent))
+                reason.Reason.Students.Add(currentStudent);
+                if(!reason.Selected && reason.Reason.Students.Contains(currentStudent))
+                reason.Reason.Students.Remove(currentStudent);
+                try{
+                     _DBcontext.Entry(reason.Reason).State = EntityState.Modified;
+                } catch{}
+            }
+             _DBcontext.SaveChanges();
+            //_DBcontext.Students.Update(currentStudent);
+            
+            
+            return RedirectToAction("StudOfRiskGroup");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -127,5 +214,6 @@ namespace journalapp.Controllers
         {
             return View("Error!");
         }
+
     }
 }

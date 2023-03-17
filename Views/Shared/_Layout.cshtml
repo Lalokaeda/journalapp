@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<Emp> SignInManager
+@inject UserManager<Emp> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+
+}
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
@@ -10,7 +20,7 @@
     <link rel="shortcut icon" href="~/images/logo-no-shadow.svg" type="image/x-icon"/>
 </head>
 <body style="overflow-x: hidden;">
- 
+
     <header style="height: 70px;">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-0">
 
@@ -26,7 +36,12 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark text-menu" href="#"></a>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                @if(User.IsInRole(WC.AdminRole)){
+                                    <a class="nav-link text-dark text-menu" href="/admin">Панель администратора</a>
+                                }
+                            }
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark text-menu" href="#"></a>
@@ -45,7 +60,7 @@
             </div>
         </nav>
     </header>
-   @* <div class="wrapper container-fluid"> *@
+
         <aside role="complementary">
   <div class="menu card win">
     <div class="container border-bottom">
@@ -57,22 +72,22 @@
         <a href="#">Социальный паспорт</a>
         </li>
         <li>
-        <a asp-area="" asp-controller="Student" asp-action="StudentList" >Список обучающихся</a>
+        <a href="/Student/StudentList">Список обучающихся</a>
         </li>
         <li>
-        <a href="#">Лист здоровья</a>
+        <a href="/Student/StudHealthGroups">Лист здоровья</a>
         </li>
         <li>
-        <a asp-area="" asp-controller="Student" asp-action="PositionsList">Организация самоуправления</a>
+        <a href="/Student/PositionsList">Организация самоуправления</a>
         </li>
         <li>
-        <a href="#">Группа риска</a>
+        <a href="/Student/StudOfRiskGroup">Группа риска</a>
         </li>
         <li>
-        <a href="#">Сведения о занятости во внеурочное время</a>
+        <a href="/Business/BusinessList">Сведения о занятости во внеурочное время</a>
         </li>
         <li>
-        <a href="#">Участие в различных мероприятиях</a>
+        <a href="/StudentsOfEvent/StudOfEventList">Участие в различных мероприятиях</a>
         </li>
         <li>
         <a href="#">Воспитательная деятельность</a>
@@ -84,18 +99,22 @@
         <a href="#">Педагогический контроль</a>
         </li>
         <li>
-        <a href="#">Индивидуальная работа</a>
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
         </li>
-        <li>
-        <a href="#">Часы общения</a>
-        </li>
-        <li>
-        <a href="#">Родительские собрания</a>
-        </li>
+</div>
+        
     </ul>
     </nav>
   </div>
-</aside>
+</aside> 
+
 
     <div class="container-fluid content" id="content">
         <main role="main" class="pb-3">
@@ -104,7 +123,6 @@
     </div>
 
 
-        @* </div> *@
     <footer class="border-top footer text-muted">
         <div class="container text-center">
             &copy; 2022 - МпК - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -116,6 +134,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+jQuery(function ($) {
+$("#Phone").mask("+7(999)999-99-99");
+});
+</script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

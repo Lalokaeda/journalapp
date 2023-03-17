@@ -9,7 +9,18 @@ namespace journalapp.ViewModels
     public class PositionsViewModel
     {
         public Position Position { get; set; }
-        public Student CurStudent {get; set;}
-        public List<SelectListItem> StudentsSelectList { get; set; }
+        private Student _curStudent;
+        public Student CurStudent {
+            get
+            {
+                return _curStudent;
+            } 
+            set 
+            {
+            _curStudent=value;
+            _curStudent.PositionId=this.Position.Id;
+            }
+        }
+        public List<SelectListItem>? StudentsSelectList { get; set; }
     }
 }

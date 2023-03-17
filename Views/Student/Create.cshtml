@@ -1,6 +1,9 @@
 @model Student
 @{
-    ViewData["Title"] = "Добавить студента";
+  if(Model==null)
+    ViewData["Title"] = "Добавление студента";
+  else
+    ViewData["Title"] = "Редактирование студента";
 }
 <form method="post" asp-action="Create">
   <input asp-for="HealthGroupId" hidden/>
@@ -69,7 +72,7 @@
   <div class="input-group-prepend">
     <label class="input-group-text form-controlRed" asp-for="PhoneNum"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="PhoneNum">
+  <input type="text" class="form-control form-controlRed" asp-for="PhoneNum" id="Phone">
 </div>
 <span asp-validation-for="PhoneNum" class="text-danger"></span>
 
@@ -77,7 +80,7 @@
   <div class="input-group-prepend">
     <label class="input-group-text form-controlRed" asp-for="Email"></label>
   </div>
-  <input type="text" class="form-control form-controlRed" asp-for="Email">
+  <input type="text" class="form-control form-controlRed" asp-for="Email" asp->
 </div>
 
   <div class="input-group mb-3">
@@ -87,15 +90,6 @@
     </div>
   </div>
   <label asp-for="IsCommerce"></label>
-</div>
-
-  <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-      <input type="checkbox" aria-label="Checkbox for following text input" asp-for="IsExpelled">
-    </div>
-  </div>
-  <label asp-for="IsExpelled"></label>
 </div>
 
   <div class="input-group mb-3">

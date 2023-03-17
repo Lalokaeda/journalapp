@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace journalapp.Migrations
 {
     /// <inheritdoc />
-    public partial class newDBWithEmp : Migration
+    public partial class newdbsem : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -96,12 +96,26 @@ namespace journalapp.Migrations
                 name: "Hostels",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Address = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Hostels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InteractionForms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InteractionForms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -334,34 +348,6 @@ namespace journalapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EducativeEvents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
-                    LOBId = table.Column<int>(type: "int", nullable: false),
-                    EmpId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Date = table.Column<DateTime>(type: "date", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EducativeEvents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EducativeEvents_Emps",
-                        column: x => x.EmpId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EducativeEvents_LineOfBusiness",
-                        column: x => x.LOBId,
-                        principalTable: "LineOfBusiness",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WorkWithParents",
                 columns: table => new
                 {
@@ -414,6 +400,7 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
                     Theme = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Result = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
@@ -432,20 +419,66 @@ namespace journalapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseOfGroup",
+                name: "EducativeEvents",
                 columns: table => new
                 {
-                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
-                    Course = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<DateTime>(type: "date", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    LOBId = table.Column<int>(type: "int", nullable: false),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(15)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseOfGroup", x => new { x.GroupId, x.Course });
+                    table.PrimaryKey("PK_EducativeEvents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseOfGroup_Groups",
+                        name: "FK_EducativeEvents_LineOfBusiness",
+                        column: x => x.LOBId,
+                        principalTable: "LineOfBusiness",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EducativeEvents_Semestrs",
                         column: x => x.GroupId,
                         principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InteractionsWithTeachers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmpId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
+                    FormId = table.Column<int>(type: "int", nullable: false),
+                    Questions = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
+                    InteractionFormId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InteractionsWithTeachers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InteractionsWithTeachers_Emps",
+                        column: x => x.EmpId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_InteractionsWithTeachers_Groups",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_InteractionsWithTeachers_InteractionForms_InteractionFormId",
+                        column: x => x.InteractionFormId,
+                        principalTable: "InteractionForms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -460,7 +493,8 @@ namespace journalapp.Migrations
                     Theme = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
                     Result = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
                     ParentsCount = table.Column<int>(type: "int", nullable: true),
-                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true)
+                    Semestr = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -479,6 +513,8 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
                     CountStudMen = table.Column<int>(type: "int", nullable: true),
                     ContStudWomen = table.Column<int>(type: "int", nullable: true),
                     CountStudents = table.Column<int>(type: "int", nullable: true),
@@ -492,7 +528,6 @@ namespace journalapp.Migrations
                     CountCommunHours = table.Column<int>(type: "int", nullable: true),
                     CountParentsMeetings = table.Column<int>(type: "int", nullable: true),
                     CountStudInEvents = table.Column<int>(type: "int", nullable: true),
-                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
@@ -500,6 +535,28 @@ namespace journalapp.Migrations
                     table.PrimaryKey("PK_Passport", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Passport_Groups",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RemarksForLoggings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
+                    Remark = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    IsFixed = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RemarksForLoggings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RemarksForLoggings_Groups",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
@@ -516,13 +573,12 @@ namespace journalapp.Migrations
                     Name = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
                     Patronymic = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: true),
                     Sex = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: false),
-                    HealthGroupId = table.Column<int>(type: "int", nullable: true),
+                    HealthGroupId = table.Column<int>(type: "int", nullable: true, defaultValue: 1),
                     PhoneNum = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: true),
                     Address = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
                     GroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
                     IsCommerce = table.Column<bool>(type: "bit", nullable: false),
-                    IsExpelled = table.Column<bool>(type: "bit", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: true),
                     Note = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     PositionId = table.Column<int>(type: "int", nullable: true)
@@ -562,7 +618,6 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Year = table.Column<DateTime>(type: "date", nullable: false),
                     Semester = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     Workshop = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: true),
@@ -591,8 +646,8 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: true),
-                    ChildGroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true)
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    ChildGroupId = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -601,12 +656,34 @@ namespace journalapp.Migrations
                         name: "FK_Curators_Groups",
                         column: x => x.ChildGroupId,
                         principalTable: "Groups",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Curators_Students",
                         column: x => x.StudentId,
                         principalTable: "Students",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expelleds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    Semestr = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expelleds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expelled_Students",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -616,8 +693,9 @@ namespace journalapp.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
                     VisitDate = table.Column<DateTime>(type: "date", nullable: false),
-                    GoalOfVisil = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    GoalOfVisit = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Result = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false)
                 },
                 constraints: table =>
@@ -632,15 +710,63 @@ namespace journalapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InAcadems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    Semestr = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InAcadems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InAcadems_Students",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IndividualAchivs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Semester = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    LOBId = table.Column<int>(type: "int", nullable: false),
+                    Achievement = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndividualAchivs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IndividualAchivs_LineOfBusiness",
+                        column: x => x.LOBId,
+                        principalTable: "LineOfBusiness",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IndividualAchivs_Students",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ParentOfStud",
                 columns: table => new
                 {
                     ParentId = table.Column<int>(type: "int", nullable: false),
-                    SrudentId = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ParentOfStud", x => new { x.ParentId, x.SrudentId });
+                    table.PrimaryKey("PK_ParentOfStud", x => new { x.ParentId, x.StudentId });
                     table.ForeignKey(
                         name: "FK_ParentOfStud_Parents",
                         column: x => x.ParentId,
@@ -648,7 +774,7 @@ namespace journalapp.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ParentOfStud_Students",
-                        column: x => x.SrudentId,
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -660,7 +786,8 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
+                    DatenTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     Result = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false)
@@ -712,6 +839,7 @@ namespace journalapp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Semestr = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     TOCId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
@@ -821,14 +949,19 @@ namespace journalapp.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EducativeEvents_EmpId",
+                name: "IX_EducativeEvents_GroupId",
                 table: "EducativeEvents",
-                column: "EmpId");
+                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EducativeEvents_LOBId",
                 table: "EducativeEvents",
                 column: "LOBId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expelleds_StudentId",
+                table: "Expelleds",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GraphicVisitsHostel_StudentId",
@@ -846,18 +979,53 @@ namespace journalapp.Migrations
                 column: "SpecialityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InAcadems_StudentId",
+                table: "InAcadems",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IndividualAchivs_LOBId",
+                table: "IndividualAchivs",
+                column: "LOBId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IndividualAchivs_StudentId",
+                table: "IndividualAchivs",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InteractionsWithTeachers_EmpId",
+                table: "InteractionsWithTeachers",
+                column: "EmpId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InteractionsWithTeachers_GroupId",
+                table: "InteractionsWithTeachers",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InteractionsWithTeachers_InteractionFormId",
+                table: "InteractionsWithTeachers",
+                column: "InteractionFormId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParentMeeting_GroupId",
                 table: "ParentMeeting",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ParentOfStud_SrudentId",
+                name: "IX_ParentOfStud_StudentId",
                 table: "ParentOfStud",
-                column: "SrudentId");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Passport_GroupId",
                 table: "Passport",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RemarksForLoggings_GroupId",
+                table: "RemarksForLoggings",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
@@ -951,16 +1119,25 @@ namespace journalapp.Migrations
                 name: "CommunicationHours");
 
             migrationBuilder.DropTable(
-                name: "CourseOfGroup");
-
-            migrationBuilder.DropTable(
                 name: "Curators");
 
             migrationBuilder.DropTable(
                 name: "EducativeEvents");
 
             migrationBuilder.DropTable(
+                name: "Expelleds");
+
+            migrationBuilder.DropTable(
                 name: "GraphicVisitsHostel");
+
+            migrationBuilder.DropTable(
+                name: "InAcadems");
+
+            migrationBuilder.DropTable(
+                name: "IndividualAchivs");
+
+            migrationBuilder.DropTable(
+                name: "InteractionsWithTeachers");
 
             migrationBuilder.DropTable(
                 name: "ParentMeeting");
@@ -970,6 +1147,9 @@ namespace journalapp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Passport");
+
+            migrationBuilder.DropTable(
+                name: "RemarksForLoggings");
 
             migrationBuilder.DropTable(
                 name: "StudentsOfEvents");
@@ -994,6 +1174,9 @@ namespace journalapp.Migrations
 
             migrationBuilder.DropTable(
                 name: "LineOfBusiness");
+
+            migrationBuilder.DropTable(
+                name: "InteractionForms");
 
             migrationBuilder.DropTable(
                 name: "Events");

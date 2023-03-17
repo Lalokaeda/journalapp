@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using journalapp.Data.Entities;
 
 namespace journalapp;
 
@@ -31,6 +33,7 @@ public partial class Student
     [Display(Name = "Номер телефона")]
     public string PhoneNum { get; set; } = null!;
 
+    [EmailAddress]
     [Display(Name = "Электронная почта")]
     public string? Email { get; set; }
 
@@ -45,8 +48,11 @@ public partial class Student
     [Display(Name = "Коммерция")]
     public bool IsCommerce { get; set; }
 
-    [Display(Name = "Отчислен")]
-    public bool IsExpelled { get; set; }
+ //   [Display(Name = "Отчислен")]
+  //  public bool IsExpelled { get; set; }
+
+  //  [Display(Name = "В академическом отпуске")]
+ //   public bool IsAcadem { get; set; }
 
     [Display(Name = "Номер комнаты")]
     public int? RoomId { get; set; }
@@ -77,6 +83,36 @@ public partial class Student
 
     public virtual ICollection<Parent> Parents { get; } = new List<Parent>();
 
-    public virtual ICollection<RiskGroup> Reasons { get; } = new List<RiskGroup>();
+    public virtual ICollection<RiskGroup> Reasons { get; set;} = new List<RiskGroup>();
+    public virtual ICollection<IndividualAchiv> IndividualAchivs { get; } = new List<IndividualAchiv>();
 
+    public virtual ICollection<Expelled> Expelleds { get; } = new List<Expelled>();
+
+    public virtual ICollection<InAcadem> InAcadems { get; } = new List<InAcadem>();
+
+    public string GetShortName(){
+        string shortName;
+        if (Patronymic !=null)
+        shortName= String.Concat(Surname, " ", Name.Substring(0, 1), ". ", Patronymic.Substring(0, 1), ".");
+        else
+        shortName= String.Concat(Surname, " ", Name.Substring(0, 1), ".");
+        return shortName;
+    }
+
+    public string GetFullName(){
+        string fullName;
+        if (Patronymic !=null)
+        fullName= String.Concat(Surname, " ", Name, " ", Patronymic);
+        else
+        fullName= String.Concat(Surname, " ", Name);
+        return fullName;
+    }
+    public string GetReasonsOfRiskGroup(){
+         StringBuilder sb = new StringBuilder();
+            foreach (var reason in Reasons)
+            {
+                sb.AppendLine(reason.Reason);
+            }
+        return sb.ToString();
+    }
 }

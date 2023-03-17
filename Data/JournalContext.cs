@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using journalapp.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,6 @@ public partial class JournalContext : IdentityDbContext<Emp>
     public virtual DbSet<Business> Businesses { get; set; }
 
     public virtual DbSet<CommunicationHour> CommunicationHours { get; set; }
-
-    public virtual DbSet<CourseOfGroup> CourseOfGroups { get; set; }
 
     public virtual DbSet<Curator> Curators { get; set; }
 
@@ -43,7 +42,7 @@ public partial class JournalContext : IdentityDbContext<Emp>
 
     public virtual DbSet<ParentMeeting> ParentMeetings { get; set; }
 
-    public virtual DbSet<Passport> Passports { get; set; }
+    public virtual DbSet<Passport> Passport { get; set; }
 
     public virtual DbSet<Position> Positions { get; set; }
 
@@ -67,6 +66,18 @@ public partial class JournalContext : IdentityDbContext<Emp>
 
     public virtual DbSet<WorkWithStudent> WorkWithStudents { get; set; }
 
+    public virtual DbSet<IndividualAchiv> IndividualAchivs {get; set;}
+    
+    public virtual DbSet<Expelled> Expelleds {get; set;}
+
+    public virtual DbSet<InAcadem> InAcadems {get; set;}
+
+    public virtual DbSet<InteractionForm> InteractionForms {get; set;}
+
+    public virtual DbSet<InteractionWithTeachers> InteractionsWithTeachers {get; set;}
+
+    public virtual DbSet<RemarksForLogging> RemarksForLoggings {get; set;}
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 base.OnModelCreating(modelBuilder);
@@ -80,7 +91,7 @@ base.OnModelCreating(modelBuilder);
             entity.Property(e => e.Workshop)
                 .HasMaxLength(150)
                 .IsUnicode(false);
-            entity.Property(e => e.Year).HasColumnType("date");
+            
 
             entity.HasOne(d => d.StudentAssotiation).WithMany(p => p.Businesses)
                 .HasForeignKey(d => d.StudentAssotiationId)
@@ -111,21 +122,6 @@ base.OnModelCreating(modelBuilder);
                 .HasConstraintName("FK_CommunicationHours_Groups");
         });
 
-        modelBuilder.Entity<CourseOfGroup>(entity =>
-        {
-            entity.HasKey(e => new { e.GroupId, e.Course });
-
-            entity.ToTable("CourseOfGroup");
-
-            entity.Property(e => e.GroupId)
-                .HasMaxLength(15)
-                .IsUnicode(false);
-            entity.Property(e => e.Year).HasColumnType("date");
-
-            entity.HasOne(d => d.Group).WithMany(p => p.CourseOfGroups)
-                .HasForeignKey(d => d.GroupId)
-                .HasConstraintName("FK_CourseOfGroup_Groups");
-        });
 
         modelBuilder.Entity<Curator>(entity =>
         {
@@ -158,9 +154,9 @@ base.OnModelCreating(modelBuilder);
                 .HasMaxLength(200)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.Emp).WithMany(p => p.EducativeEvents)
-                .HasForeignKey(d => d.EmpId)
-                .HasConstraintName("FK_EducativeEvents_Emps");
+            entity.HasOne(d => d.Group).WithMany(p => p.EducativeEvents)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_EducativeEvents_Semestrs");
 
             entity.HasOne(d => d.Lob).WithMany(p => p.EducativeEvents)
                 .HasForeignKey(d => d.Lobid)
@@ -179,7 +175,7 @@ base.OnModelCreating(modelBuilder);
         {
             entity.ToTable("GraphicVisitsHostel");
 
-            entity.Property(e => e.GoalOfVisil)
+            entity.Property(e => e.GoalOfVisit)
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Result)
@@ -224,7 +220,6 @@ base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Hostel>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address)
                 .HasMaxLength(250)
                 .IsUnicode(false);
@@ -257,11 +252,11 @@ base.OnModelCreating(modelBuilder);
                 .HasMaxLength(200)
                 .IsUnicode(false);
 
-            entity.HasMany(d => d.Srudents).WithMany(p => p.Parents)
+            entity.HasMany(d => d.Students).WithMany(p => p.Parents)
                 .UsingEntity<Dictionary<string, object>>(
                     "ParentOfStud",
                     r => r.HasOne<Student>().WithMany()
-                        .HasForeignKey("SrudentId")
+                        .HasForeignKey("StudentId")
                         .HasConstraintName("FK_ParentOfStud_Students"),
                     l => l.HasOne<Parent>().WithMany()
                         .HasForeignKey("ParentId")
@@ -269,7 +264,7 @@ base.OnModelCreating(modelBuilder);
                         .HasConstraintName("FK_ParentOfStud_Parents"),
                     j =>
                     {
-                        j.HasKey("ParentId", "SrudentId");
+                        j.HasKey("ParentId", "StudentId");
                         j.ToTable("ParentOfStud");
                     });
         });
@@ -374,6 +369,8 @@ base.OnModelCreating(modelBuilder);
             entity.Property(e => e.Surname)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+            entity.Property(e => e.HealthGroupId)
+                .HasDefaultValue(1);
 
             entity.HasOne(d => d.Group).WithMany(p => p.Students)
                 .HasForeignKey(d => d.GroupId)
@@ -420,7 +417,7 @@ base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<StudentsOfEvent>(entity =>
         {
-            entity.Property(e => e.DateTime).HasColumnType("datetime");
+            entity.Property(e => e.DatenTime).HasColumnType("datetime");
             entity.Property(e => e.Result)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -481,6 +478,77 @@ base.OnModelCreating(modelBuilder);
             entity.HasOne(d => d.Student).WithMany(p => p.WorkWithStudents)
                 .HasForeignKey(d => d.StudentId)
                 .HasConstraintName("FK_WorkWithStudents_Students");
+        });
+
+                modelBuilder.Entity<IndividualAchiv>(entity =>
+        {
+            entity.Property(e => e.LOBId).HasColumnName("LOBId");
+            entity.Property(e => e.Achievement)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Student).WithMany(p => p.IndividualAchivs)
+                .HasForeignKey(d => d.StudentId)
+                .HasConstraintName("FK_IndividualAchivs_Students");
+
+            entity.HasOne(d => d.LOB).WithMany(p => p.IndividualAchivs)
+                .HasForeignKey(d => d.LOBId)
+                .HasConstraintName("FK_IndividualAchivs_LineOfBusiness");
+        });
+
+                modelBuilder.Entity<Expelled>(entity =>
+        {
+
+            entity.HasOne(d => d.Student).WithMany(p => p.Expelleds)
+                .HasForeignKey(d => d.StudentId)
+                .HasConstraintName("FK_Expelled_Students");
+        });
+
+        modelBuilder.Entity<InteractionForm>(entity =>
+        {
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+        });
+    
+        modelBuilder.Entity<InteractionWithTeachers>(entity =>
+        {
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.GroupId)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+            entity.Property(e => e.Questions)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Group).WithMany(p => p.InteractionsWithTeachers)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_InteractionsWithTeachers_Groups");
+
+            entity.HasOne(d => d.Emp).WithMany(p => p.InteractionsWithTeachers)
+                .HasForeignKey(d => d.EmpId)
+                .HasConstraintName("FK_InteractionsWithTeachers_Emps");
+        });
+
+        modelBuilder.Entity<RemarksForLogging>(entity =>
+        {
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.GroupId)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+            entity.Property(e => e.Remark)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Group).WithMany(p => p.RemarksForLoggings)
+                .HasForeignKey(d => d.GroupId)
+                .HasConstraintName("FK_RemarksForLoggings_Groups");
+
+        });
+
+         modelBuilder.Entity<InAcadem>(entity =>
+        {
+            entity.HasOne(d => d.Student).WithMany(p => p.InAcadems)
+                .HasForeignKey(d => d.StudentId)
+                .HasConstraintName("FK_InAcadems_Students");
         });
 
         OnModelCreatingPartial(modelBuilder);

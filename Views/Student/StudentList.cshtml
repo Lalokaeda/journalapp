@@ -20,7 +20,7 @@
 <tbody>
    @foreach (var student in Model)
    {
-    @if(!student.IsExpelled)
+    @if(student.Expelleds.Count()>0)
     {
     <tr>
         <td>@student.Surname</td>
@@ -47,8 +47,7 @@
 
         <td class="text-center">
             <div class="btn-group">
-    <a class="link-secondary mx-1" style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
- <a class="link-danger mx-1"style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Отчислен</a>
+    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
     </div>
         </td>
     </tr>
@@ -79,7 +78,7 @@
 
         <td class="text-center">
             <div class="btn-group">
-    <a class="link-secondary mx-1" style="font-size: 12px;" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
+    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="Create">Редактировать</a>
     </div>
         </td>
     </tr>

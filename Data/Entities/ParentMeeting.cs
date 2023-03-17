@@ -15,7 +15,10 @@ public partial class ParentMeeting
 
     public int? ParentsCount { get; set; }
 
-    public string? GroupId { get; set; }
+    public int Semestr { get; set; }
 
-    public virtual Group? Group { get; set; }
+    public string GroupId { get; set; }=null!;
+
+    public virtual Group Group { get; set; } = null!;
+
 }
