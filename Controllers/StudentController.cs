@@ -22,11 +22,17 @@ namespace journalapp.Controllers
         }
 
 
-        // public IActionResult StudentList()
-        // {
-        //     List<Student> studentsList=_DBcontext.Students.OrderBy(i=>i.IsExpelled).ThenBy(i=>i.Surname).ToList();
-        //     return View(studentsList);
-        // }
+        public IActionResult StudentList()
+        {
+            List<StudentViewModel> studentsVMList = new List<StudentViewModel>();
+            List<Student> studentsList = _DBcontext.Students.ToList();
+            foreach (var student in studentsList){
+                StudentViewModel studentVM = new StudentViewModel{
+                    Student=student
+                };
+            }
+            return View(studentsVMList.OrderBy(i=>i.IsExpelled).ThenBy(i=>i.Student.Surname));
+        }
 
         public IActionResult Create(int? Id)
         { 
