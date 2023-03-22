@@ -170,7 +170,7 @@ namespace journalapp.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(user, Input.Role);
                     _logger.LogInformation("User created a new account with password.");
-                    returnUrl= Url.Content("~/");
+                    returnUrl= Url.Content("/admin");
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -192,6 +192,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             //             await _signInManager.SignInAsync(user, isPersistent: false);
             //             return LocalRedirect(returnUrl);
             //         }
+           // return RedirectToRoute("");
                 }
             //     foreach (var error in result.Errors)
             //     {

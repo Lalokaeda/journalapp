@@ -4,28 +4,39 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using journalapp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NuGet.Packaging;
+using journalapp.Service;
+using Microsoft.AspNetCore.Http;
 
 namespace journalapp.Controllers
 {
- //   [Route("[controller]")]
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly JournalContext _DBcontext;
-        public StudentController(JournalContext context)
+        private readonly IHttpContextAccessor _accessor;
+        private HttpContext _httpContext;
+        private string? currentGroup;
+        public StudentController(JournalContext context, IHttpContextAccessor accessor)
         {
             _DBcontext=context;
+            _accessor=accessor;
+            _httpContext=_accessor.HttpContext;
+            if(_httpContext.Session.Get<string>(WC.currentGroup)!=null &&
+                _httpContext.Session.Get<string>(WC.currentGroup)!="")
+                currentGroup=_httpContext.Session.Get<string>(WC.currentGroup);
         }
 
 
         public IActionResult StudentList()
         {
             List<StudentViewModel> studentsVMList = new List<StudentViewModel>();
-            List<Student> studentsList = _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).AsNoTracking().ToList();
+            List<Student> studentsList = _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).Where(i=>i.GroupId==currentGroup).AsNoTracking().ToList();
             foreach (var student in studentsList){
                 StudentViewModel studentVM = new StudentViewModel{
                     Student=student

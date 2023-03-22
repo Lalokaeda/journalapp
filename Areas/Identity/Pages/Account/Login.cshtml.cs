@@ -15,18 +15,25 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using journalapp.Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace journalapp.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<Emp> _signInManager;
+        private readonly UserManager<Emp> _userManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly JournalContext _DBcontext;
 
-        public LoginModel(SignInManager<Emp> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<Emp> signInManager, ILogger<LoginModel> logger,
+                             UserManager<Emp> userManager, JournalContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager=userManager;
+            _DBcontext=context;
         }
 
         /// <summary>
@@ -116,6 +123,10 @@ namespace journalapp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    List<Group> groups= _DBcontext.Groups.AsNoTracking().ToList();
+                    if(groups.Where(i=>i.EmpId==user.Id).Count()>0)
+                    HttpContext.Session.Set(WC.currentGroup, groups.Where(i=>i.EmpId==user.Id).FirstOrDefault().Id);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

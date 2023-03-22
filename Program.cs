@@ -39,20 +39,22 @@ public class Program
                     x.Conventions.Add(new AdminAreaAutorization("Admin", "AdminArea"));
                 });
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+    options.Conventions.AuthorizePage("/Register", WC.AdminRole));
         // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         // .AddCookie(options => options.LoginPath = "/login");
 
 
-        builder.Services.AddIdentity<Emp, IdentityRole>(/*opts =>
+        builder.Services.AddIdentity<Emp, IdentityRole>(opts =>
             {
-                opts.User.RequireUniqueEmail = false;
                 opts.Password.RequiredLength = 6;
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequireUppercase = false;
                 opts.Password.RequireDigit = false;
-            }*/).AddEntityFrameworkStores<JournalContext>()
+                opts.User.RequireUniqueEmail = true;
+                opts.Lockout.AllowedForNewUsers = false;
+            }).AddEntityFrameworkStores<JournalContext>()
             .AddDefaultTokenProviders().AddDefaultUI();
 
             //настраиваем authentication cookie
