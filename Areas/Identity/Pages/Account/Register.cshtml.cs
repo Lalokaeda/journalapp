@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace journalapp.Areas.Identity.Pages.Account
 {
+    [Area("Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Emp> _signInManager;

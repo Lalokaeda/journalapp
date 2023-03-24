@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using journalapp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace journalapp.ViewModels
+namespace journalapp.Models
 {
     public class StudentsOfRiskGroupViewModel
     {

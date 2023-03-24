@@ -1,3 +1,85 @@
+@model List<journalapp.Models.EmpViewModel>
 @{
-    ViewData["Title"] = "EmpList";
+    ViewData["Title"] = "Список пользователей";
 }
+
+<form method="get">
+<div class="card win">
+<h1> @ViewData["Title"]</h1>
+ <div class="card-body">
+   <select class="js-example-basic-single" name="Role" >
+</select>
+    <table class="table table-hover table-bordered"><thead>
+    <tr>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>E-mail</th>
+        <th>Роли</th>
+        <th>Группы</th>
+
+    </tr>
+</thead>
+<tbody>
+   @foreach (var emp in Model)
+   {
+    <tr>
+        <td>@emp.Emp.Surname</td>
+        <td>@emp.Emp.Name</td>
+        @if(emp.Emp.Patronymic!=null)
+        {
+            <td>@emp.Emp.Patronymic</td>
+        }
+        else 
+        {
+            <td></td>
+        }
+        <td>@emp.Emp.Email</td>
+        @if(emp.Roles.Count!=0)
+         {  <td>
+            <ul>
+            @foreach(var role in emp.Roles)
+            {
+                <li>@role</li>
+            }
+            </ul>
+            </td>
+        }
+        else 
+        {
+            <td></td>
+        }
+
+         @if(emp.Emp.Groups.Count!=0)
+         {  <td>
+            <ul>
+            @foreach(var group in emp.Emp.Groups)
+            {
+                <li>@group.Id</li>
+            }
+            </ul>
+            </td>
+        }
+        else 
+        {
+            <td></td>
+        }
+    </tr>
+ 
+   }
+
+</tbody>
+</table>
+<div class="text-right btn-right">
+    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Добавить работника</a>
+</div>
+
+</div>
+</div>
+</form>
+
+ <script type="text/javascript">
+    $(document).ready(function() {
+    $('.js-example-basic-single').attr("lang", "ru").select2();
+});
+</script> 

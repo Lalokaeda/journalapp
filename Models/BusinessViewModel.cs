@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace journalapp.ViewModels
+namespace journalapp.Models
 {
     public class BusinessViewModel
     {

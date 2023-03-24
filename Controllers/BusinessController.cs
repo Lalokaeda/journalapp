@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using journalapp.Models;
-using journalapp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
