@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using journalapp.Service;
 using Microsoft.EntityFrameworkCore;
+using journalapp.Models;
 
 namespace journalapp.Areas.Identity.Pages.Account
 {
@@ -124,9 +125,11 @@ namespace journalapp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    List<Group> groups= _DBcontext.Groups.AsNoTracking().ToList();
-                    if(groups.Where(i=>i.EmpId==user.Id).Count()>0)
-                    HttpContext.Session.Set(WC.currentGroup, groups.Where(i=>i.EmpId==user.Id).FirstOrDefault().Id);
+                    SessionInf.SetCurrentGroupId(null, HttpContext, user.Id, _DBcontext, _userManager);
+                   // HttpContext.Session.Set(WC.currentGroup, groups.Where(i=>i.EmpId==user.Id).FirstOrDefault().Id);
+                    // if (User.IsInRole(WC.AdminRole))
+                    // SessionInf.SetCurrentGroupId(groups.FirstOrDefault().Id, HttpContext);
+                   // HttpContext.Session.Set(WC.currentGroup, groups.FirstOrDefault().Id);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

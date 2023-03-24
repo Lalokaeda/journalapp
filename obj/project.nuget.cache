@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/qBXB9xhbj5uOrCLjsryLwPUGHiWOId497QbATMLHUaNhbZyiv2e5cIWaUQq7ucjxsJervVl4OH7L10R7hPnbw==",
+  "dgSpecHash": "ia339aCQz8ej5e8aOc5XMBT8mazVvF0ZvlnVWaEoFT1umiEVrh16y4DvN0F4Ye8TUocuoiU34CmO9MzUeFJGWw==",
   "success": true,
   "projectFilePath": "D:\\journalapp\\journalapp.csproj",
   "expectedPackageFiles": [
@@ -118,6 +118,7 @@
     "C:\\Users\\Acer\\.nuget\\packages\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
+    "C:\\Users\\Acer\\.nuget\\packages\\select2.js\\4.0.13\\select2.js.4.0.13.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\Acer\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",

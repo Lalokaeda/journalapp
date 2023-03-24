@@ -6,6 +6,7 @@ $('.navbar-brand').on('click', function(e) {
     $('.menu').toggleClass('menu_active');
     $('.content').toggleClass('content_active');
   })
-  $(function() {
+  
+$(function() {
     $('#datetimepicker1').datetimepicker();
   });

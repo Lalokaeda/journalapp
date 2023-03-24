@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using NuGet.Packaging;
 using journalapp.Service;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using journalapp.Models;
 
 namespace journalapp.Controllers
 {
@@ -21,22 +23,33 @@ namespace journalapp.Controllers
         private readonly JournalContext _DBcontext;
         private readonly IHttpContextAccessor _accessor;
         private HttpContext _httpContext;
-        private string? currentGroup;
-        public StudentController(JournalContext context, IHttpContextAccessor accessor)
+        private readonly UserManager<Emp> _userManager;
+        private string currentEmpId;
+        public StudentController(JournalContext context, IHttpContextAccessor accessor, 
+                                    UserManager<Emp> userManager)
         {
             _DBcontext=context;
             _accessor=accessor;
+            _userManager=userManager;
             _httpContext=_accessor.HttpContext;
-            if(_httpContext.Session.Get<string>(WC.currentGroup)!=null &&
-                _httpContext.Session.Get<string>(WC.currentGroup)!="")
-                currentGroup=_httpContext.Session.Get<string>(WC.currentGroup);
+            currentEmpId= _userManager.GetUserId(_httpContext.User);
         }
 
 
-        public IActionResult StudentList()
+        public async Task<IActionResult> StudentList(string? group)
         {
+            IEnumerable<SelectListItem> GroupsDropDown=_DBcontext.Groups.Where(i=>i.EmpId == currentEmpId).Select(i => new SelectListItem{
+                Text=i.Id,
+                Value=i.Id
+            });
+            ViewBag.GroupsDropDown=GroupsDropDown;
+            if (group!=null | SessionInf.CurrentGroupId==null)
+            SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
+
             List<StudentViewModel> studentsVMList = new List<StudentViewModel>();
-            List<Student> studentsList = _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).Where(i=>i.GroupId==currentGroup).AsNoTracking().ToList();
+            List<Student> studentsList = new List<Student>();
+             studentsList= await _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).Where(i=>i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
+
             foreach (var student in studentsList){
                 StudentViewModel studentVM = new StudentViewModel{
                     Student=student
@@ -93,22 +106,24 @@ namespace journalapp.Controllers
             return RedirectToAction("StudentList");
         }
 
-       public IActionResult PositionsList()
-        {
-            List<Position> positions=_DBcontext.Positions.ToList();
+       public async Task<IActionResult> PositionsList(string? group)
+        {   
+            if (group!=null | SessionInf.CurrentGroupId==null)
+            SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
+            List<Position> positions= await _DBcontext.Positions.ToListAsync();
             List<PositionsViewModel> positionsViewModels = new List<PositionsViewModel>();
-            List<Student> students=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).ToList();
-            foreach(var obj in positions)
+            List<Student> students= await _DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0 && i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
+            foreach(var position in positions)
             {
                 PositionsViewModel posVM= new PositionsViewModel{
-            Position=obj
+            Position=position
             // StudentsSelectList=students.Where(i=>i.Patronymic!=null).Select(i => new SelectListItem{
             //     Text= i.GetFullName(),
             //     Value=i.Id.ToString()
             //     }).ToList()
             };
             try{
-                 posVM.CurStudent=students.Where(i=> i.Position==obj).FirstOrDefault();
+                 posVM.CurStudent=students.Where(i=> i.Position==position).FirstOrDefault();
             } 
             catch{}
             positionsViewModels.Add(posVM);
@@ -116,10 +131,11 @@ namespace journalapp.Controllers
             return View(positionsViewModels);
         }
 
-        public IActionResult AddStudentOnPosition(int Id)
+        public async Task<IActionResult> AddStudentOnPosition(int Id)
         {
-             Position selectedPosition=_DBcontext.Positions.Find(Id);
-            List<Student> studentsWithoutPosition=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).ToList();
+             Position selectedPosition=await _DBcontext.Positions.FindAsync(Id);
+            List<Student> studentsWithoutPosition= await _DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0 
+                                                                            && i.GroupId ==SessionInf.CurrentGroupId).ToListAsync();
                 PositionsViewModel posVM= new PositionsViewModel{
             Position=selectedPosition,
             StudentsSelectList=studentsWithoutPosition.Select(i => new SelectListItem{
@@ -128,7 +144,7 @@ namespace journalapp.Controllers
                 }).ToList()
             };
             try{
-                posVM.CurStudent=_DBcontext.Students.Where(i=> i.PositionId==Id).Include(i=>i.Position).FirstOrDefault();
+                posVM.CurStudent= await _DBcontext.Students.Where(i=> i.PositionId==Id).Include(i=>i.Position).FirstOrDefaultAsync();
             }
             catch{
             }
@@ -137,21 +153,24 @@ namespace journalapp.Controllers
 
          [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddStudentOnPosition(PositionsViewModel newsStudentPosition)
+        public async Task<IActionResult> AddStudentOnPosition(PositionsViewModel newsStudentPosition)
         {  
-            Student currentStudent=_DBcontext.Students.Find(newsStudentPosition.CurStudent.Id);
+            Student currentStudent= await _DBcontext.Students.FindAsync(newsStudentPosition.CurStudent.Id);
             currentStudent.PositionId= newsStudentPosition.CurStudent.PositionId;
             _DBcontext.Students.Update(currentStudent);
             _DBcontext.SaveChanges();
             return RedirectToAction("PositionsList");
         }
 
-        public IActionResult StudHealthGroups(){
-        IEnumerable<Student> studentsList=_DBcontext.Students.Include(i=>i.HealthGroup).Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0).AsNoTracking();
+        public async Task<IActionResult> StudHealthGroups(string? group){
+            if (group!=null | SessionInf.CurrentGroupId==null)
+            SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
+        IEnumerable<Student> studentsList= await _DBcontext.Students.Include(i=>i.HealthGroup).Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0
+                                            && i.GroupId==SessionInf.CurrentGroupId).AsNoTracking().ToListAsync();
             return View(studentsList);
         }
 
-  public IActionResult EditHealthGroup(int Id)
+  public async Task<IActionResult> EditHealthGroup(int Id)
         { 
             IEnumerable<SelectListItem> HealthGroupsDropDown=_DBcontext.HealthGroups.Select(i => new SelectListItem{
                 Text=i.Name,
@@ -159,7 +178,7 @@ namespace journalapp.Controllers
             });
 
             ViewBag.HealthGroupsDropDown=HealthGroupsDropDown;
-                Student currentStudent=_DBcontext.Students.Find(Id);
+                Student currentStudent= await _DBcontext.Students.FindAsync(Id);
                 return View(currentStudent);
         }
 
@@ -172,15 +191,17 @@ namespace journalapp.Controllers
             return RedirectToAction("StudHealthGroups");
         }
 
-        public IActionResult StudOfRiskGroup(){
-        IEnumerable<Student> studentsList=_DBcontext.Students.Where(i=>i.Reasons.Count!=0 && i.Expelleds.Count==0 && i.InAcadems.Count==0)
-                                            .Include(i=>i.Reasons);
+        public async Task<IActionResult> StudOfRiskGroup(string? group){
+            if (group!=null | SessionInf.CurrentGroupId==null)
+            SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
+        IEnumerable<Student> studentsList= await _DBcontext.Students.Where(i=>i.Reasons.Count!=0 && i.Expelleds.Count==0 && i.InAcadems.Count==0)
+                                            .Include(i=>i.Reasons).ToListAsync();
             return View(studentsList);
         }
 
-         public IActionResult AddEditRiskGroups(int? Id)
+         public async Task<IActionResult> AddEditRiskGroups(int? Id)
         {
-            List<Student> students=_DBcontext.Students.Include(i=>i.Reasons).ToList();
+            List<Student> students= await _DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
             StudentsOfRiskGroupViewModel StudRiskVM;
             if (Id !=null)
             {
@@ -213,9 +234,9 @@ namespace journalapp.Controllers
             
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEditRiskGroups(StudentsOfRiskGroupViewModel model)
+        public async Task<IActionResult> AddEditRiskGroups(StudentsOfRiskGroupViewModel model)
         {
-            Student currentStudent=_DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student).FirstOrDefault();
+            Student currentStudent= await _DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student).FirstOrDefaultAsync();
             foreach(var reason in model.AllReasons)
             {
                if(reason.Selected && !reason.Reason.Students.Contains(currentStudent))

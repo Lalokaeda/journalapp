@@ -2,10 +2,12 @@
 @{
     ViewData["Title"] = "Список Студентов";
 }
-
+<form method="get">
 <div class="card win">
 <h1> @ViewData["Title"]</h1>
  <div class="card-body">
+   <select class="js-example-basic-single" name="group"  onchange="StudentList(this.value)">
+</select>
     <table class="table table-hover table-bordered"><thead>
     <tr>
         <th>Фамилия</th>
@@ -93,3 +95,20 @@
 
 </div>
 </div>
+</form>
+
+ <script type="text/javascript">
+    $(document).ready(function() {
+    $('.js-example-basic-single').attr("lang", "ru").select2();
+});
+</script> 
+
+ <script type="text/jscript">
+        function StudentList(string group) {
+            $.get("/Student/StudentList");
+        };
+ </script>
+
+ @* <script type="text/javascript">
+      $(".js-example-basic-single").attr("lang", "ru").select2(); 
+</script> *@

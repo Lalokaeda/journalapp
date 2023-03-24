@@ -22,7 +22,7 @@ public class Program
         builder.Services.AddDbContext<JournalContext>(options =>{
             options.UseSqlServer(connectionString);
             options.EnableSensitiveDataLogging();
-        });
+        }).AddTransient<JournalContext>();
 
 
         builder.Services.AddHttpContextAccessor();

@@ -9,32 +9,51 @@
         <div class="card-body">
             <div class="row"> 
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password">Пароль</label>                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.ConfirmPassword"></label>                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Surname" class="form-control" aria-required="true"/>
-                    <label asp-for="Input.Surname">Фамилия</label>                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text form-controlRed" asp-for="Input.Email" ></label>
                     </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Name" class="form-control" aria-required="true"/>
-                    <label asp-for="Input.Name">Имя</label>
-                    <span asp-validation-for="Input.Name" class="text-danger"></span> 
+                    <input type="text" class="form-control form-controlRed" asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com">
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Patronymic" class="form-control" />
-                    <label asp-for="Input.Patronymic">Отчество</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text form-controlRed" asp-for="Input.Password" ></label>
+                    </div>
+                    <input type="text" class="form-control form-controlRed" asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="password">
                 </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                @* <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div> *@
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text form-controlRed" asp-for="Input.Surname" ></label>
+                    </div>
+                    <input type="text" class="form-control form-controlRed" asp-for="Input.Surname" aria-required="true">
+                </div>
+                <span asp-validation-for="Input.Surname" class="text-danger"></span>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text form-controlRed" asp-for="Input.Name" ></label>
+                    </div>
+                    <input type="text" class="form-control form-controlRed" asp-for="Input.Name" aria-required="true">
+                </div>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text form-controlRed" asp-for="Input.Patronymic" ></label>
+                    </div>
+                    <input type="text" class="form-control form-controlRed" asp-for="Input.Patronymic">
+                </div>
+
                 <div class="form-floating mb-3">
                     <select class="custom-select" asp-for="Input.Role" asp-items="@Model.RolesDropDown">
                         <option disabled selected>Выберите должность</option>
