@@ -193,7 +193,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             //             await _signInManager.SignInAsync(user, isPersistent: false);
             //             return LocalRedirect(returnUrl);
             //         }
-           // return RedirectToRoute("");
+            return RedirectToPage("/Admin/Emp/EmpList");
                 }
             //     foreach (var error in result.Errors)
             //     {
