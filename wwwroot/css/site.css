@@ -52,6 +52,7 @@ body {
 #headAuthWin{
   align-items: center;
   justify-content: center;
+  padding-right: 50px;
 }
 
 #win-reg{

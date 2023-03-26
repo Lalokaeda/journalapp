@@ -10,3 +10,4 @@ $('.navbar-brand').on('click', function(e) {
 $(function() {
     $('#datetimepicker1').datetimepicker();
   });
+  

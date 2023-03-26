@@ -16,7 +16,7 @@
 <tbody>
    @foreach (var business in Model)
    {
-    @if(business.Student.Expelleds.Count()>0)
+    @if(business.Student.Expelleds.Count()<0)
     {
     <tr>
         <td>@business.Student.GetShortName()</td>
@@ -42,31 +42,6 @@
         </td>
     </tr>
             }
-    else{
-        <tr class="text-danger">
-       <td>@business.Student.GetShortName()</td>
-        @if(business.Workshop!=null)
-        {
-            <td>@business.Workshop</td>
-        }
-        else 
-        {
-            <td></td>
-        }
-         @if(business.StudentAssotiation!=null)
-         {
-            <td>@business.StudentAssotiation.Name</td>
-        }
-        else 
-        {
-            <td></td>
-        }
-
-        <td class="text-center">
-    <a class="link-secondary mx-1" style="font-size: 12px;" asp-area="" asp-controller="Business" asp-route-Id="@business.Id" asp-action="AddEdit">Редактировать</a>
-        </td>
-    </tr>
-    }
    }
 
 </tbody>
