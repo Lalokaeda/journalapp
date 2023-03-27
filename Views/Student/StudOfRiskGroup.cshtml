@@ -3,44 +3,63 @@
     ViewData["Title"] = "Группа риска";
 }
 
-<div class="card win">
-    <h1> @ViewData["Title"]</h1>
-    <div class="card-body">
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th>Студент</th>
-                    <th>Причина</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var student in Model)
-                {
-                    @if(student.Expelleds.Count()==0)
+<form id="stdOfRGroupsListForm" method="get">
+    <div class="card win">
+        <h1> @ViewData["Title"]</h1>
+        <div class="card-body">
+            <select class="currentGroupSelect" id="group" name="group" asp-for="@SessionInf.CurrentGroupId"  onchange="UpdateStdOfRGroupList()" asp-items="@ViewBag.GroupsDropDown"></select>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Студент</th>
+                        <th>Причина</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model)
                     {
-                        <tr>
-                            <td>@student.GetShortName()</td>
-                            <td>
-                                <ul> 
-                                    @foreach (var reason in student.Reasons)
-                                    {
-                                        <li>@reason.Reason </li>
-                                    }
-                                </ul>
-                            </td>
-                            <td class="text-center">
-                                <div class="btn-group">
-                                    <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="AddEditRiskGroups">Редактировать</a>
-                                </div>
-                            </td>
-                        </tr>
+                        @if(student.Expelleds.Count()==0)
+                        {
+                            <tr>
+                                <td>@student.GetShortName()</td>
+                                <td>
+                                    <ul> 
+                                        @foreach (var reason in student.Reasons)
+                                        {
+                                            <li>@reason.Reason </li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a class="link-secondary mx-1" asp-area="" asp-controller="Student" asp-route-Id="@student.Id" asp-action="AddEditRiskGroups">Редактировать</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
-        <div class="text-right btn-right">
-            <a class="btn btn-primary" asp-area="" asp-controller="Student" asp-action="AddEditRiskGroups">Добавить студента</a>
+                </tbody>
+            </table>
+            <div class="text-right btn-right">
+                <a class="btn btn-primary" asp-area="" asp-controller="Student" asp-action="AddEditRiskGroups">Добавить студента</a>
+            </div>
         </div>
     </div>
-</div>
+</form>
+
+<script type="text/jscript">
+    function UpdateStdOfRGroupList(){
+      debugger;
+      const data = $('#stdOfRGroupsListForm').serialize();
+      $.ajax({
+        type: 'GET',
+        url: '@Url.Action("StudOfRiskGroup")',
+        data: data
+      })
+      .done(function(){
+        $('#stdOfRGroupsListForm').submit();
+
+})
+};
+ </script>

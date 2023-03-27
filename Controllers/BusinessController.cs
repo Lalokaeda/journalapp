@@ -21,6 +21,7 @@ namespace journalapp.Controllers
         private HttpContext _httpContext;
         private readonly UserManager<Emp> _userManager;
         private string currentEmpId;
+        List<SelectListItem> GroupsDropDown=new List<SelectListItem>();
 
         public BusinessController(JournalContext context, IHttpContextAccessor accessor, 
                                     UserManager<Emp> userManager)
@@ -30,58 +31,68 @@ namespace journalapp.Controllers
             _userManager=userManager;
             _httpContext=_accessor.HttpContext;
             currentEmpId= _userManager.GetUserId(_httpContext.User);
+            if(_httpContext.User.IsInRole(WC.AdminRole))
+            GroupsDropDown= _DBcontext.Groups.Select(i => new SelectListItem{
+                Text=i.Id,
+                Value=i.Id
+            }).ToList();
+            if (_httpContext.User.IsInRole(WC.PrepodRole))
+           GroupsDropDown= _DBcontext.Groups.Where(i=>i.EmpId==currentEmpId).Select(i => new SelectListItem{
+                Text=i.Id,
+                Value=i.Id
+            }).ToList();
         }
 
         public async Task<IActionResult> BusinessList(string? group)
         {
-            IEnumerable<SelectListItem> GroupsDropDown=_DBcontext.Groups.Where(i=>i.EmpId == currentEmpId).Select(i => new SelectListItem{
-                Text=i.Id,
-                Value=i.Id
-            });
             ViewBag.GroupsDropDown=GroupsDropDown;
-            if (group!=null | SessionInf.CurrentGroupId==null)
-            SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
-            List<Business> businessList= await _DBcontext.Businesses.Where(i=>i.Student.Expelleds.Count==0&&i.Student.InAcadems.Count==0 && i.Student.GroupId==SessionInf.CurrentGroupId)
-                                                                .Include(i=>i.Student).Include(i=>i.StudentAssotiation)
-                                                                .OrderBy(i=>i.Student.Surname).ToListAsync();
+            if (group!=null || SessionInf.CurrentGroupId==null)
+            await SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
+
+            List<Business> businessList= await _DBcontext.Businesses.Include(i=>i.Student).Include(i=>i.StudentAssotiation)
+                                                                        .Where(i=>i.Student.Expelleds.Count==0&&i.Student.InAcadems.Count==0 && i.Student.GroupId==SessionInf.CurrentGroupId)
+                                                                        .OrderBy(i=>i.Student.Surname).ToListAsync();
             return View(businessList);
         }
 
         public async Task<IActionResult> AddEdit(int? Id)
         {    
             if (SessionInf.CurrentGroupId==null)
-            SessionInf.SetCurrentGroupId(null, _httpContext, currentEmpId, _DBcontext, _userManager);
+                await SessionInf.SetCurrentGroupId(null, _httpContext, currentEmpId, _DBcontext, _userManager);
+
             BusinessViewModel currentBusiness=new BusinessViewModel{
-                StudentsList=_DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0 && i.GroupId==SessionInf.CurrentGroupId)
+                StudentsList=await _DBcontext.Students.Where(i=>i.Expelleds.Count==0&&i.InAcadems.Count==0 && i.GroupId==SessionInf.CurrentGroupId)
                                                 .Select(i=> new SelectListItem{
                     Text=i.GetShortName(),
                     Value=i.Id.ToString()
-                }).ToList(),
-                AssotiationsList=_DBcontext.StudentAssotiations.Select(i=> new SelectListItem{
+                }).ToListAsync(),
+                AssotiationsList= await _DBcontext.StudentAssotiations.Select(i=> new SelectListItem{
                     Text=i.Name,
                     Value=i.Id.ToString()
-                }).ToList(),
+                }).ToListAsync(),
             };
 
-            if (Id==null)
-            currentBusiness.Business=new Business();
-            else {
-                currentBusiness.Business=await _DBcontext.Businesses.Where(i=>i.Id==Id).FirstOrDefaultAsync();
-                
-            }
+            if (Id==null || Id==0)
+                currentBusiness.Business=new Business();
+            else 
+                currentBusiness.Business=await _DBcontext.Businesses.Where(i=>i.Id==Id).FirstOrDefaultAsync(); 
+
             return View(currentBusiness);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddEdit(BusinessViewModel model)
-        {
-            if (model.Business.Id !=0)
+        public async Task<IActionResult> AddEdit(BusinessViewModel model)
+        {   if((model.Business.StudentAssotiationId == null ||model.Business.StudentAssotiationId == 0)
+                && (model.Business.Workshop==null || model.Business.Workshop.Trim()==""))
+                return RedirectToAction("BusinessList");
+                
+            if (model.Business.Id !=0 && model.Business.Id!=null)
             _DBcontext.Businesses.Update(model.Business);
             else{
                 _DBcontext.Businesses.Add(model.Business);
             }
-            _DBcontext.SaveChanges();
+            await _DBcontext.SaveChangesAsync();
             return RedirectToAction("BusinessList");
         }
 

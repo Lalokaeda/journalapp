@@ -38,6 +38,7 @@
     <option selected></option>
   </select>
 </div>
+<span asp-validation-for="StudentsOfEvent.EventId" class="text-danger"></span>
 
     <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -45,6 +46,25 @@
   </div>
   <input type="text" class="form-control form-controlRed" asp-for="StudentsOfEvent.Result">
 </div>  
+<span asp-validation-for="StudentsOfEvent.Result" class="text-danger"></span>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="StudentsOfEvent.Semestr"></label>
+  </div>
+  <select class="custom-select" asp-for="StudentsOfEvent.Semestr">
+    <option selected></option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+  </select>
+</div>
+<span asp-validation-for="StudentsOfEvent.Semestr" class="text-danger"></span>
 
 <div class="text-right btn-right">
 <a class="btn btn-primary" asp-action="StudOfEventList">Отмена</a>

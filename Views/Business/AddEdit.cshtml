@@ -1,11 +1,12 @@
 @model journalapp.Models.BusinessViewModel
 @{
-  if(Model.Business==null)
+  if(Model.Business.Id==null ||Model.Business.Id==0)
     ViewData["Title"] = "Добавление сведений";
   else
     ViewData["Title"] = "Редактирование сведений";
 }
 <form method="post" asp-action="AddEdit">
+  <input asp-for="Business.Id" hidden/>
 <div class="card win">
 
 <h1> @ViewData["Title"]</h1>
@@ -37,6 +38,24 @@
     <option selected></option>
   </select>
 </div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text " asp-for="Business.Semestr"></label>
+  </div>
+  <select class="custom-select" asp-for="Business.Semestr">
+    <option disabled selected></option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+  </select>
+</div>
+<span asp-validation-for="Business.Semestr" class="text-danger"></span>
 
 <div class="text-right btn-right">
 <a class="btn btn-primary" asp-action="BusinessList">Отмена</a>

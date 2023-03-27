@@ -88,7 +88,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required (ErrorMessage = "Введите электронную почту")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -97,8 +97,8 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required (ErrorMessage = "Введите пароль")]
+            [StringLength(100, ErrorMessage = "Пароль должен быть длиной от 6 символов")]
             [DataType(DataType.Password)]
             [Display(Name = "Пароль")]
             public string Password { get; set; }
@@ -107,27 +107,22 @@ namespace journalapp.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            
-            [DataType(DataType.Password)]
-            [Display(Name = "Подтверждение пароля")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
 
               /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-             [Required]
+            [Required (ErrorMessage = "Введите имя")]
             [Display(Name = "Имя")]
             public string Name { get; set; }
-             [Required]
+            [Required (ErrorMessage = "Введите фамилию")]
             [Display(Name = "Фамилия")]
             public string Surname { get; set; }
             
             [Display(Name = "Отчество")]
             public string Patronymic { get; set; }
             
-             [Required]
+            [Required (ErrorMessage = "Выберите должность")]
             [Display(Name = "Должность")]
             public string Role  {get; set;}
         }
@@ -193,7 +188,7 @@ namespace journalapp.Areas.Identity.Pages.Account
             //             await _signInManager.SignInAsync(user, isPersistent: false);
             //             return LocalRedirect(returnUrl);
             //         }
-            return RedirectToPage("/Admin/Emp/EmpList");
+            return RedirectToPage("/EmpList", new { area = "Admin" });
                 }
             //     foreach (var error in result.Errors)
             //     {

@@ -9,7 +9,10 @@ public partial class StudentsOfEvent
 {
     public int Id { get; set; }
     
+    [Required(ErrorMessage = "Укажите семестр")]
+    [Display(Name = "Семестр")]
     public int Semestr { get; set; }
+
     [BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
     [Display(Name = "Дата и время проведения")]
     public DateTime? DatenTime { get; set; }

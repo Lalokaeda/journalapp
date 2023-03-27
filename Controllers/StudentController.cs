@@ -24,6 +24,7 @@ namespace journalapp.Controllers
         private HttpContext _httpContext;
         private readonly UserManager<Emp> _userManager;
         private string currentEmpId;
+        List<SelectListItem> GroupsDropDown=new List<SelectListItem>();
         public StudentController(JournalContext context, IHttpContextAccessor accessor, 
                                     UserManager<Emp> userManager)
         {
@@ -32,17 +33,23 @@ namespace journalapp.Controllers
             _userManager=userManager;
             _httpContext=_accessor.HttpContext;
             currentEmpId= _userManager.GetUserId(_httpContext.User);
+            if(_httpContext.User.IsInRole(WC.AdminRole))
+            GroupsDropDown= _DBcontext.Groups.Select(i => new SelectListItem{
+                Text=i.Id,
+                Value=i.Id
+            }).ToList();
+            if (_httpContext.User.IsInRole(WC.PrepodRole))
+           GroupsDropDown= _DBcontext.Groups.Where(i=>i.EmpId==currentEmpId).Select(i => new SelectListItem{
+                Text=i.Id,
+                Value=i.Id
+            }).ToList();
+            
         }
 
 
-        public async Task<IActionResult> StudentList(string group)
-        {
-            IEnumerable<SelectListItem> GroupsDropDown=_DBcontext.Groups.Where(i=>i.EmpId == currentEmpId).Select(i => new SelectListItem{
-                Text=i.Id,
-                Value=i.Id
-            });
+        public async Task<IActionResult> StudentList(string? group)
+        {   
             ViewBag.GroupsDropDown=GroupsDropDown;
-
             if (group!=null || SessionInf.CurrentGroupId==null)
                 await SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
 
@@ -62,24 +69,11 @@ namespace journalapp.Controllers
 
         public async Task<IActionResult> Create(int? Id)
         { 
-            List<SelectListItem> GroupsDropDown=new List<SelectListItem>();
-            if(User.IsInRole(WC.AdminRole))
-            GroupsDropDown= (List<SelectListItem>)_DBcontext.Groups.Select(i => new SelectListItem{
-                Text=i.Id,
-                Value=i.Id
-            });
-            if (User.IsInRole(WC.PrepodRole))
-           GroupsDropDown= (List<SelectListItem>)_DBcontext.Groups.Where(i=>i.EmpId==currentEmpId).Select(i => new SelectListItem{
-                Text=i.Id,
-                Value=i.Id
-            });
-
-            IEnumerable<SelectListItem> RoomsDropDown=_DBcontext.Rooms.Select(i => new SelectListItem{
+            ViewBag.GroupsDropDown=GroupsDropDown;
+            IEnumerable<SelectListItem> RoomsDropDown=_DBcontext.Rooms.Where(i=>i.Students.Count<i.Roominess).Select(i => new SelectListItem{
                 Text= i.Hostel.Address+", комната №"+i.NumofRoom.ToString(),
                 Value=i.Id.ToString()
             });
-
-            ViewBag.GroupsDropDown=GroupsDropDown;
             ViewBag.RoomsDropDown=RoomsDropDown;
 
             StudentViewModel currentStudentVM = new StudentViewModel();
@@ -100,17 +94,24 @@ namespace journalapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task <IActionResult> Create(StudentViewModel newsStudent)
         {
-             if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
-            {
-                var riskGroup= await _DBcontext.RiskGroups.FindAsync(4);
-                if (newsStudent.Student.Id !=0 && newsStudent.Student.Id !=null)
+            var riskGroup= await _DBcontext.RiskGroups.Where(i=>i.Id==4).AsNoTracking().FirstOrDefaultAsync();
+            if (newsStudent.Student.Id !=0 && newsStudent.Student.Id !=null)
                 {
-                    var newStudent = _DBcontext.Students.Include(i=>i.Reasons).Where(i=> i.Id==newsStudent.Student.Id);
-                    if (!newsStudent.Student.Reasons.Contains(riskGroup))
+                    var newStudent = await _DBcontext.Students.Include(i=>i.Reasons).Where(i=> i.Id==newsStudent.Student.Id).AsNoTracking().FirstOrDefaultAsync();
+                if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
+                {
+                    if (!newStudent.Reasons.Contains(riskGroup))
                         newsStudent.Student.Reasons.Add(riskGroup);
                 }
-                
+                else
+                    if (newStudent.Reasons.Contains(riskGroup))
+                        newsStudent.Student.Reasons.Remove(riskGroup);
+            
             }
+            else
+             if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
+                newsStudent.Student.Reasons.Add(riskGroup);
+
                 
             if (newsStudent.IsExpelled)
                 newsStudent.Student.Note+=" Отчислен";
@@ -121,7 +122,7 @@ namespace journalapp.Controllers
             if (newsStudent.Student.Id !=0 && newsStudent.Student.Id!=null)
                 _DBcontext.Students.Update(newsStudent.Student);
             else
-                _DBcontext.Students.Add(newsStudent.Student);
+                 _DBcontext.Students.Add(newsStudent.Student);
 
             await _DBcontext.SaveChangesAsync();
 
@@ -130,6 +131,7 @@ namespace journalapp.Controllers
 
        public async Task<IActionResult> PositionsList(string group)
         {   
+            ViewBag.GroupsDropDown=GroupsDropDown;
             if (group!=null || SessionInf.CurrentGroupId==null)
                 await SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
             List<Position> positions= await _DBcontext.Positions.ToListAsync();
@@ -193,6 +195,7 @@ namespace journalapp.Controllers
 
         public async Task<IActionResult> StudHealthGroups(string? group)
         {
+            ViewBag.GroupsDropDown=GroupsDropDown;
             if (group!=null | SessionInf.CurrentGroupId==null)
                 await SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
             IEnumerable<Student> studentsList= await _DBcontext.Students.Include(i=>i.HealthGroup)
@@ -228,10 +231,12 @@ namespace journalapp.Controllers
 
         public async Task<IActionResult> StudOfRiskGroup(string? group)
         {
+            ViewBag.GroupsDropDown=GroupsDropDown;
+
             if (group!=null | SessionInf.CurrentGroupId==null)
                 await SessionInf.SetCurrentGroupId(group, _httpContext, currentEmpId, _DBcontext, _userManager);
             IEnumerable<Student> studentsList= await _DBcontext.Students.Where(i=>i.Reasons.Count!=0 && i.Expelleds.Count==0
-                                                                                 && i.InAcadems.Count==0).Include(i=>i.Reasons).ToListAsync();
+                                                                                 && i.InAcadems.Count==0 && i.GroupId==SessionInf.CurrentGroupId).Include(i=>i.Reasons).ToListAsync();
             
             return View(studentsList);
         }
@@ -239,7 +244,8 @@ namespace journalapp.Controllers
          public async Task<IActionResult> AddEditRiskGroups(int? Id)
         {
             List<Student> students= await _DBcontext.Students.Include(i=>i.Reasons)
-                                                            .Where(i=>i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
+                                                            .Where(i=>i.Expelleds.Count==0
+                                                                 && i.InAcadems.Count==0 && i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
             StudentsOfRiskGroupViewModel StudRiskVM;
             
             if (Id !=null)
@@ -278,21 +284,22 @@ namespace journalapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEditRiskGroups(StudentsOfRiskGroupViewModel model)
         {
+            if(model.AllReasons.Where(i=>i.Selected==true).Count()==0)
+                return RedirectToAction("StudOfRiskGroup");
+
             Student currentStudent= await _DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student).FirstOrDefaultAsync();
             foreach(var reason in model.AllReasons)
             {
-               if(reason.Selected && !reason.Reason.Students.Contains(currentStudent))
-                    reason.Reason.Students.Add(currentStudent);
-                if(!reason.Selected && reason.Reason.Students.Contains(currentStudent))
-                    reason.Reason.Students.Remove(currentStudent);
-                try
-                {
-                    _DBcontext.Entry(reason.Reason).State = EntityState.Modified;
-                } catch{}
+               if(reason.Selected && currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).Count()==0)
+                currentStudent.Reasons.Add(reason.Reason);
+                if(!reason.Selected && currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).Count()>0)
+                currentStudent.Reasons.Remove(currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).First());
+                     
             }
-
+            _DBcontext.Students.Update(currentStudent);
              _DBcontext.SaveChanges();
             //_DBcontext.Students.Update(currentStudent);
+            
             
             return RedirectToAction("StudOfRiskGroup");
         }

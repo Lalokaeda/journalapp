@@ -148,3 +148,13 @@ td ul{
   padding: 1px;
   margin: 0;
 }
+
+.currentGroupSelect{
+  margin-bottom: 10px;
+}
+
+.text-inf{
+  font-family: 'Arial', monospace;
+  color: #323C8D;
+  margin: 2;
+}

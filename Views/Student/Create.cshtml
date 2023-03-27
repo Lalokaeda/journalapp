@@ -1,6 +1,6 @@
 @model journalapp.Models.StudentViewModel
 @{
-  if(Model==null)
+  if(Model.Student.Id ==null || Model.Student.Id ==0)
     ViewData["Title"] = "Добавление студента";
   else
     ViewData["Title"] = "Редактирование студента";
@@ -28,7 +28,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text form-controlRed" asp-for="Student.Surname"></label>
         </div>
-        <input type="text" class="form-control form-controlRed" name="Surname" asp-for="Student.Surname">
+        <input type="text" class="form-control form-controlRed" asp-for="Student.Surname">
       </div>
       <span asp-validation-for="Student.Surname" class="text-danger"></span>
 
@@ -80,7 +80,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text form-controlRed" asp-for="Student.Email"></label>
         </div>
-        <input type="text" class="form-control form-controlRed" asp-for="Student.Email" asp->
+        <input type="text" class="form-control form-controlRed" asp-for="Student.Email" placeholder="name@example.com">
       </div>
 
       <div class="input-group mb-3">
@@ -99,6 +99,7 @@
         <input type="text" class="form-control form-controlRed" asp-for="Student.Note">
       </div>
 
+      <label class="text-inf">Если студент проживает в общежитии:</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <label class="input-group-text " asp-for="Student.RoomId"></label>

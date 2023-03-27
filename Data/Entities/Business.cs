@@ -8,9 +8,9 @@ public partial class Business
 {
     public int Id { get; set; }
 
-  //  public DateTime Year { get; set; }
-
-     public int Semester { get; set; }
+    [Required(ErrorMessage = "Укажите семестр")]
+    [Display(Name = "Семестр")]
+     public int Semestr { get; set; }
 
     [Required(ErrorMessage = "Выберите студента")]
     [Display(Name = "Студент")]

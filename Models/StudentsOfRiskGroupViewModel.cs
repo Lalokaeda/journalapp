@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using journalapp.Models;
@@ -11,6 +12,9 @@ namespace journalapp.Models
     {
         private int? _student;
         private IEnumerable<ReasonViewModel> _reasons;
+        
+        [Required(ErrorMessage = "Выберите студента")]
+        [Display(Name = "Студент")]
         public int? Student
         {
             get;
