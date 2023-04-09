@@ -1,6 +1,6 @@
 @model journalapp.Models.StudentsOfEventViewModel
 @{
-  if(Model.StudentsOfEvent==null)
+  if(Model.StudentsOfEvent.Id==null || Model.StudentsOfEvent.Id==0)
     ViewData["Title"] = "Добавление сведений";
   else
     ViewData["Title"] = "Редактирование сведений";

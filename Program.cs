@@ -14,9 +14,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // TODO с этим надо что-то сделать
-        //builder.Services.AddTransient<Datamanager>();
-
         var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'JournalContextConnection' not found.");
 
         builder.Services.AddDbContext<JournalContext>(options =>{
@@ -39,10 +36,8 @@ public class Program
                     x.Conventions.Add(new AdminAreaAutorization("Admin", "AdminArea"));
                 });
 
-builder.Services.AddRazorPages(options =>
-    options.Conventions.AuthorizePage("/Register", WC.AdminRole));
-        // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        // .AddCookie(options => options.LoginPath = "/login");
+        builder.Services.AddRazorPages(options =>
+            options.Conventions.AuthorizePage("/Register", WC.AdminRole));
 
 
         builder.Services.AddIdentity<Emp, IdentityRole>(opts =>
@@ -55,20 +50,10 @@ builder.Services.AddRazorPages(options =>
                 opts.User.RequireUniqueEmail = true;
                 opts.Lockout.AllowedForNewUsers = false;
             }).AddEntityFrameworkStores<JournalContext>()
-            .AddDefaultTokenProviders().AddDefaultUI();
+                .AddDefaultTokenProviders().AddDefaultUI();
 
-            //настраиваем authentication cookie
-            // builder.Services.ConfigureApplicationCookie(options =>
-            // {
-            //     options.Cookie.Name = "JournalAuth";
-            //     options.Cookie.HttpOnly = true;
-            //     options.LoginPath = "/account/login";
-            //     options.AccessDeniedPath = "/account/accessdenied";
-            //     options.SlidingExpiration = true;
-            // });
-
-            //настраиваем политику авторизации для Admin area
-            builder.Services.AddAuthorization(x =>
+            // настраиваем политику авторизации для Admin area
+        builder.Services.AddAuthorization(x =>
             {
                 x.AddPolicy("AdminArea", policy => { policy.RequireRole(WC.AdminRole); });
             });
@@ -96,18 +81,18 @@ builder.Services.AddRazorPages(options =>
         app.UseAuthorization();
         
         app.UseSession();
+        // маршрутизация
         app.UseEndpoints(endpoints =>
-{
-        endpoints.MapRazorPages();
-        endpoints.MapControllerRoute(
-            name:"admin", 
-            pattern:"{area:exists}/{controller=Home}/{action=Index}/{id?}");
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+        {
+            endpoints.MapRazorPages();
+            endpoints.MapControllerRoute(
+                name:"admin", 
+                pattern:"{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
 
-      //  app.MapRazorPages();
         app.Run();
     }
 }

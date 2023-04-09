@@ -15,10 +15,9 @@ namespace journalapp.Models
         
         [Required(ErrorMessage = "Выберите студента")]
         [Display(Name = "Студент")]
-        public int? Student
+        public Student Student
         {
-            get;
-            set;
+            get; set;
         }
         public IEnumerable<ReasonViewModel> AllReasons{get; set;}
         public List<SelectListItem>? StudentsSelectList { get; set; }

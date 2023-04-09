@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using journalapp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace journalapp.Controllers
 {
-  //  [Route("[controller]")]
+  [Authorize]
     public class StudentsOfEventController : Controller
     {
         private readonly JournalContext _DBcontext;

@@ -1,23 +1,40 @@
 @model journalapp.Models.StudentsOfRiskGroupViewModel
 @{
-  if(Model.Student!=null)
+  if(Model.Student.Id!=null && Model.Student.Id!=0)
     ViewData["Title"] = "Редактирование студента";
   else
     ViewData["Title"] = "Добавление студента в группу риска";
 }
 <form method="post" asp-action="AddStudentOnPosition">
+    <input asp-for="Student.GroupId" hidden/>
+  <input asp-for="Student.Surname" hidden/>
+  <input asp-for="Student.Name" hidden/>
+  <input asp-for="Student.Patronymic" hidden/>
+  <input asp-for="Student.Sex" hidden/>
+  <input asp-for="Student.Address" hidden/>
+  <input asp-for="Student.PhoneNum" hidden/>
+  <input asp-for="Student.Email" hidden/>
+  <input asp-for="Student.IsCommerce" hidden/>
+  <input asp-for="Student.Note" hidden/>
+    <input asp-for="Student.PositionId" hidden/>
+    <input asp-for="Student.RoomId" hidden/>
 <div class="card win">
 <h1> @ViewData["Title"]</h1>
  <div class="card-body">
-    <div class="input-group mb-3">
-  <select class="custom-select" style="margin: 10px; height: 30px" asp-for="Student" asp-items="@Model.StudentsSelectList">
+      @if(Model.Student.Id==null || Model.Student.Id==0){
+ <select class="custom-select" style="margin: 10px; height: 30px" asp-for="Student.Id" asp-items="@Model.StudentsSelectList">
     <option disabled selected>Выберите студента</option>
   </select>
+      }
+      else{
+       <input type="text" class="form-control form-controlRed" style="margin: 10px; height: 30px" value="@Model.Student.GetFullName()" disabled/>
+       <input asp-for="Student.Id" hidden/>
+      }
+ 
  <div class="editor-field">
     @Html.EditorFor(x => x.AllReasons)
 </div>
-<span asp-validation-for="Student" class="text-danger"></span>
-</div>
+<span asp-validation-for="Student.Id" class="text-danger"></span>
 
 
 <div class="text-right btn-right">

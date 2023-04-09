@@ -55,7 +55,9 @@ namespace journalapp.Controllers
 
             List<StudentViewModel> studentsVMList = new List<StudentViewModel>();
             List<Student> studentsList = new List<Student>();
-            studentsList= await _DBcontext.Students.Include(i=>i.Expelleds).Include(i=>i.InAcadems).Where(i=>i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
+            studentsList= await _DBcontext.Students.Include(i=>i.Expelleds)
+                                                    .Include(i=>i.InAcadems)
+                                                    .Where(i=>i.GroupId==SessionInf.CurrentGroupId).ToListAsync();
             foreach (var student in studentsList){
                 StudentViewModel studentVM = new StudentViewModel{
                     Student=student
@@ -95,23 +97,6 @@ namespace journalapp.Controllers
         public async Task <IActionResult> Create(StudentViewModel newsStudent)
         {
             var riskGroup= await _DBcontext.RiskGroups.Where(i=>i.Id==4).AsNoTracking().FirstOrDefaultAsync();
-            if (newsStudent.Student.Id !=0 && newsStudent.Student.Id !=null)
-                {
-                    var newStudent = await _DBcontext.Students.Include(i=>i.Reasons).Where(i=> i.Id==newsStudent.Student.Id).AsNoTracking().FirstOrDefaultAsync();
-                if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
-                {
-                    if (!newStudent.Reasons.Contains(riskGroup))
-                        newsStudent.Student.Reasons.Add(riskGroup);
-                }
-                else
-                    if (newStudent.Reasons.Contains(riskGroup))
-                        newsStudent.Student.Reasons.Remove(riskGroup);
-            
-            }
-            else
-             if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
-                newsStudent.Student.Reasons.Add(riskGroup);
-
                 
             if (newsStudent.IsExpelled)
                 newsStudent.Student.Note+=" Отчислен";
@@ -123,6 +108,22 @@ namespace journalapp.Controllers
                 _DBcontext.Students.Update(newsStudent.Student);
             else
                  _DBcontext.Students.Add(newsStudent.Student);
+
+            await _DBcontext.SaveChangesAsync();
+
+             if (newsStudent.Student.Id !=0 && newsStudent.Student.Id !=null)
+                {
+                    var currentStudent = await _DBcontext.Students.Include(i=>i.Reasons).Where(i=> i.Id==newsStudent.Student.Id).FirstOrDefaultAsync();
+                if(newsStudent.Student.RoomId!=0 && newsStudent.Student.RoomId!=null)
+                {
+                    if (currentStudent.Reasons.Where(i=>i.Id==riskGroup.Id).Count()==0)
+                        currentStudent.Reasons.Add(riskGroup);
+                }
+                else
+                    if (currentStudent.Reasons.Where(i=>i.Id==riskGroup.Id).Count()>0)
+                        currentStudent.Reasons.Remove(riskGroup);
+            _DBcontext.Students.Update(currentStudent);
+            }
 
             await _DBcontext.SaveChangesAsync();
 
@@ -185,7 +186,14 @@ namespace journalapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddStudentOnPosition(PositionsViewModel newsStudentPosition)
         {  
-            Student currentStudent= await _DBcontext.Students.FindAsync(newsStudentPosition.CurStudent.Id);
+            Student currentStudent;
+            try{
+            currentStudent= await _DBcontext.Students.Where(i=>i.PositionId== newsStudentPosition.CurStudent.PositionId
+                                    && i.GroupId == SessionInf.CurrentGroupId).FirstOrDefaultAsync();
+            currentStudent.PositionId= null;
+            _DBcontext.Students.Update(currentStudent);
+            } catch{}
+            currentStudent= await _DBcontext.Students.FindAsync(newsStudentPosition.CurStudent.Id);
             currentStudent.PositionId= newsStudentPosition.CurStudent.PositionId;
             _DBcontext.Students.Update(currentStudent);
             _DBcontext.SaveChanges();
@@ -252,28 +260,26 @@ namespace journalapp.Controllers
             {
                 Student selectedStudent=students.Where(i=>i.Id==Id).FirstOrDefault();
                 StudRiskVM= new StudentsOfRiskGroupViewModel{
-                    Student=Id,
-                    StudentsSelectList=students.Select(i => new SelectListItem{
-                        Text= i.GetFullName(),
-                        Value=i.Id.ToString()
-                    }).ToList(),
+                    Student=selectedStudent,
                     AllReasons=_DBcontext.RiskGroups.Select(i=> new ReasonViewModel(){
                         Reason=i,
                         Selected = selectedStudent.Reasons.Contains(i)? true:false
                     })
-                };    
+                };   
+                 
             }
             else
             {
                 StudRiskVM= new StudentsOfRiskGroupViewModel{
-                    StudentsSelectList=students.Select(i => new SelectListItem{
+                    StudentsSelectList=students.Where(i=>i.Reasons.Count==0).Select(i => new SelectListItem{
                         Text= i.GetFullName(),
                         Value=i.Id.ToString()
                     }).ToList(),
                     AllReasons=_DBcontext.RiskGroups.Select(i=> new ReasonViewModel{
                         Reason=i,
                         Selected=false
-                    })
+                    }),
+                    Student = new Student()
                 };
             }
 
@@ -284,16 +290,20 @@ namespace journalapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEditRiskGroups(StudentsOfRiskGroupViewModel model)
         {
-            if(model.AllReasons.Where(i=>i.Selected==true).Count()==0)
-                return RedirectToAction("StudOfRiskGroup");
+            // if(model.AllReasons.Where(i=>i.Selected==true).Count()==0)
+            //     return RedirectToAction("StudOfRiskGroup");
 
-            Student currentStudent= await _DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student).FirstOrDefaultAsync();
+            Student currentStudent= await _DBcontext.Students.Include(i=>i.Reasons).Where(i=>i.Id==model.Student.Id).FirstOrDefaultAsync();
             foreach(var reason in model.AllReasons)
             {
                if(reason.Selected && currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).Count()==0)
                 currentStudent.Reasons.Add(reason.Reason);
-                if(!reason.Selected && currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).Count()>0)
-                currentStudent.Reasons.Remove(currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).First());
+                if(!reason.Selected && currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).Count()>0){
+                    currentStudent.Reasons.Remove(currentStudent.Reasons.Where(i=>i.Id==reason.Reason.Id).First());
+                    if (reason.Reason.Id==4)
+                        currentStudent.RoomId=null;
+                }
+                
                      
             }
             _DBcontext.Students.Update(currentStudent);

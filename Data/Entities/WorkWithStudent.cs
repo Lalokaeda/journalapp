@@ -7,6 +7,8 @@ public partial class WorkWithStudent
 {
     public int Id { get; set; }
 
+    public int Semestr { get; set; }
+
     public int StudentId { get; set; }
 
     public string Reason { get; set; } = null!;

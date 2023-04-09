@@ -8,7 +8,7 @@
         <h1> @ViewData["Title"]</h1>
         <div class="card-body">
             <select class="currentGroupSelect" id="group" name="group" asp-for="@SessionInf.CurrentGroupId"  onchange="UpdateStdOfRGroupList()" asp-items="@ViewBag.GroupsDropDown"></select>
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered table-responsive">
                 <thead>
                     <tr>
                         <th>Студент</th>

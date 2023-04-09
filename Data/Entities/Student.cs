@@ -9,6 +9,9 @@ namespace journalapp;
 
 public partial class Student
 {
+    [Required(ErrorMessage = "Выберите студента")]
+    [Display(Name = "Студент")]
+    [Key]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Заполните фамилию")]

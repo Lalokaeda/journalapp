@@ -7,6 +7,8 @@ public partial class WorkWithParent
 {
     public int Id { get; set; }
 
+    public int Semestr { get; set; }
+
     public int ParentId { get; set; }
 
     public string Questions { get; set; } = null!;
